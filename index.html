@@ -11,20 +11,19 @@ body{font-family:'Segoe UI', Arial;margin:0;padding:10px;background:#0f172a}
 .box{background:#1e293b;padding:20px;border-radius:15px;max-width:700px;margin:15px auto;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #334155;color:#e2e8f0}
 input,textarea,select{width:95%;padding:14px;margin:8px 0;border:2px solid #334155;border-radius:10px;background:#0f172a;color:#e2e8f0;font-size:15px}
 input:focus, textarea:focus{outline:none;border-color:#3b82f6;background:#1e293b}
-input::placeholder, textarea::placeholder{color:#64748b}
 button{background:linear-gradient(135deg, #3b82f6, #2563eb);color:white;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;width:100%;margin:8px 0;font-weight:bold;font-size:16px}
 button:hover{transform:scale(1.02)}
 .btn-danger{background:linear-gradient(135deg, #dc2626, #b91c1c)}
+.btn-secondary{background:linear-gradient(135deg, #64748b, #475569)}
 .product{display:flex;gap:15px;border:2px solid #334155;padding:15px;margin:15px 0;border-radius:12px;background:#1e293b}
 .product img{width:120px;height:120px;object-fit:cover;border-radius:10px;border:2px solid #334155}
-.product-info{flex:1; word-wrap:break-word}
 .price{color:#60a5fa;font-weight:bold;font-size:22px}
 .category-tag{background:#1e3a8a;color:#60a5fa;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
 .hidden{display:none}
 .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:15px}
 .seller-info{font-size:13px;color:#60a5fa;margin-top:8px;background:#0f172a;padding:8px;border-radius:6px;font-weight:bold}
 h2{color:#60a5fa}
-p{color:#cbd5e1}
+.saved-email{background:#1e3a8a;padding:12px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 </style>
 </head>
 <body>
@@ -35,11 +34,23 @@ p{color:#cbd5e1}
 
 <div class="box" id="loginBox">
 <h2>Jisajili / Ingia</h2>
-<input type="email" id="email" placeholder="Barua pepe">
-<input type="text" id="username" placeholder="Chagua Username yako @mfano">
-<input type="password" id="pass" placeholder="Nywila">
-<button onclick="jisajili()">Jisajili</button>
-<button style="background:linear-gradient(135deg, #6366f1, #4f46e5)" onclick="ingia()">Ingia</button>
+<div id="savedUserBox" class="hidden">
+  <p>Karibu tena</p>
+  <div class="saved-email">
+    <span id="savedEmailText"></span>
+    <button class="btn-secondary" onclick="badiliAkaunti()" style="width:100px;padding:8px">Badili</button>
+  </div>
+  <input type="password" id="passLogin" placeholder="Andika Nywila yako">
+  <button onclick="ingiaHaraka()">Ingia</button>
+</div>
+
+<div id="fullFormBox">
+  <input type="email" id="email" placeholder="Barua pepe">
+  <input type="text" id="username" placeholder="Chagua Username yako @mfano">
+  <input type="password" id="pass" placeholder="Nywila">
+  <button onclick="jisajili()">Jisajili</button>
+  <button style="background:linear-gradient(135deg, #6366f1, #4f46e5)" onclick="ingiaKamili()">Ingia</button>
+</div>
 <p id="msg" style="text-align:center;font-weight:bold"></p>
 </div>
 
@@ -48,39 +59,37 @@ p{color:#cbd5e1}
 <p>Karibu: <b id="userUsername"></b> | Mauzo: <b id="mauzo">0 TZS</b>
 <button class="btn-danger" onclick="toka()" style="width:120px;float:right">Toka</button></p>
 </div>
-
-<div class="box">
-<h2>Weka Bidhaa Yako Mpya</h2>
+<div class="box"><h2>Weka Bidhaa Yako Mpya</h2>
 <input type="text" id="jina" placeholder="Jina la Bidhaa">
 <input type="number" id="bei" placeholder="Bei TZS">
-<select id="category">
-  <option value="Nguo">Nguo</option>
-  <option value="Viatu">Viatu</option>
-  <option value="Simu">Simu na Vifaa</option>
-  <option value="Chakula">Chakula</option>
-  <option value="Huduma">Huduma</option>
-  <option value="Nyingine">Nyingine</option>
-</select>
+<select id="category"><option>Nguo</option><option>Viatu</option><option>Simu</option><option>Chakula</option><option>Huduma</option><option>Nyingine</option></select>
 <input type="text" id="picha" placeholder="Link ya picha kutoka Google">
 <textarea id="maelezo" placeholder="Elezea bidhaa. Weka namba yako hapa pia"></textarea>
-<button onclick="ongezaBidhaa()">Weka Soko - BURE</button>
-</div>
-
-<div class="box">
-<h2>Tafuta na Chuja</h2>
-<input type="text" id="searchBox" placeholder="Tafuta bidhaa..." onkeyup="onyeshaBidhaa()">
-</div>
-
-<div class="box">
-<h2>Bidhaa Zilizopo</h2>
-<div id="orodha" class="grid"></div>
-</div>
+<button onclick="ongezaBidhaa()">Weka Soko - BURE</button></div>
+<div class="box"><h2>Tafuta na Chuja</h2><input type="text" id="searchBox" placeholder="Tafuta bidhaa..." onkeyup="onyeshaBidhaa()"></div>
+<div class="box"><h2>Bidhaa Zilizopo</h2><div id="orodha" class="grid"></div></div>
 </div>
 
 <script>
 let bidhaa = JSON.parse(localStorage.getItem('bidhaa')) || [];
 let watumiaji = JSON.parse(localStorage.getItem('watumiaji')) || {};
 let currentUser = JSON.parse(localStorage.getItem('currentUserData'));
+let savedEmail = localStorage.getItem('savedEmail');
+
+window.onload = function(){
+  if(savedEmail && watumiaji[savedEmail]){
+    document.getElementById('savedUserBox').classList.remove('hidden');
+    document.getElementById('fullFormBox').classList.add('hidden');
+    document.getElementById('savedEmailText').innerText = savedEmail;
+  }
+  if(currentUser){
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('sokoBox').classList.remove('hidden');
+    document.getElementById('userUsername').innerText = '@' + currentUser.username;
+    hesabuMauzo();
+    onyeshaBidhaa();
+  }
+}
 
 function jisajili(){
   const email = document.getElementById('email').value;
@@ -89,29 +98,41 @@ function jisajili(){
   if(email && pass && username){
     watumiaji[email] = {pass: pass, username: username};
     localStorage.setItem('watumiaji', JSON.stringify(watumiaji));
+    localStorage.setItem('savedEmail', email); // HII INAKUMBUKA EMAIL
     msg('Umejisajili! Sasa Ingia','60a5fa');
+    location.reload();
   } else { msg('Jaza Email, Username na Nywila','ef4444') }
 }
 
-function ingia(){
+function ingiaKamili(){
   const email = document.getElementById('email').value;
   const pass = document.getElementById('pass').value;
   if(watumiaji[email] && watumiaji[email].pass === pass){
+    localStorage.setItem('savedEmail', email);
     currentUser = {email: email, username: watumiaji[email].username};
     localStorage.setItem('currentUserData', JSON.stringify(currentUser));
-    document.getElementById('loginBox').classList.add('hidden');
-    document.getElementById('sokoBox').classList.remove('hidden');
-    document.getElementById('userUsername').innerText = '@' + currentUser.username;
-    hesabuMauzo();
-    onyeshaBidhaa();
+    location.reload();
   } else { msg('Email au Nywila sio sahihi','ef4444') }
+}
+
+function ingiaHaraka(){
+  const pass = document.getElementById('passLogin').value;
+  if(watumiaji[savedEmail] && watumiaji[savedEmail].pass === pass){
+    currentUser = {email: savedEmail, username: watumiaji[savedEmail].username};
+    localStorage.setItem('currentUserData', JSON.stringify(currentUser));
+    location.reload();
+  } else { msg('Nywila sio sahihi','ef4444') }
+}
+
+function badiliAkaunti(){
+  localStorage.removeItem('savedEmail');
+  location.reload();
 }
 
 function toka(){
   localStorage.removeItem('currentUserData');
   currentUser = null;
-  document.getElementById('loginBox').classList.remove('hidden');
-  document.getElementById('sokoBox').classList.add('hidden');
+  location.reload();
 }
 
 function msg(text,color){ document.getElementById('msg').innerHTML = text; document.getElementById('msg').style.color = color; }
@@ -131,7 +152,7 @@ function ongezaBidhaa(){
 }
 
 function futaBidhaa(id){
-  if(confirm('Una uhakika unataka kufuta?')){
+  if(confirm('Una uhakika?')){
     bidhaa = bidhaa.filter(b => b.id!== id);
     localStorage.setItem('bidhaa', JSON.stringify(bidhaa));
     onyeshaBidhaa();
@@ -147,40 +168,25 @@ function hesabuMauzo(){
 function onyeshaBidhaa(){
   const search = document.getElementById('searchBox').value.toLowerCase();
   let filtered = bidhaa.filter(b => b.jina.toLowerCase().includes(search) || b.maelezo.toLowerCase().includes(search));
-
   let html = '';
   filtered.forEach(b => {
     const niYangu = b.mmilikiEmail === currentUser.email;
     const category = b.category || "Nyingine";
     const picha = b.picha || "https://via.placeholder.com/120/3b82f6/ffffff?text=VIJIJINI";
     const jinaMuuzaji = niYangu? `Wewe @${b.mmilikiUsername}` : `@${b.mmilikiUsername}`;
-    
-    html += `<div class="product">
-      <img src="${picha}">
-      <div class="product-info">
-        <span class="category-tag">${category}</span>
-        <h3 style="color:#f8fafc">${b.jina}</h3>
-        <p class="price">${Number(b.bei).toLocaleString()} TZS</p>
-        <p>${b.maelezo}</p>
-        <p class="seller-info">Muuzaji: ${jinaMuuzaji}</p>
-        <button onclick="nunua('${b.jina}')">NUNUA KWA WHATSAPP</button>
-        ${niYangu? `<button class="btn-danger" onclick="futaBidhaa(${b.id})">Futa Bidhaa Yangu</button>` : ''}
-      </div>
-    </div>`;
+    html += `<div class="product"><img src="${picha}"><div class="product-info">
+      <span class="category-tag">${category}</span><h3 style="color:#f8fafc">${b.jina}</h3>
+      <p class="price">${Number(b.bei).toLocaleString()} TZS</p><p>${b.maelezo}</p>
+      <p class="seller-info">Muuzaji: ${jinaMuuzaji}</p>
+      <button onclick="nunua('${b.jina}')">NUNUA KWA WHATSAPP</button>
+      ${niYangu? `<button class="btn-danger" onclick="futaBidhaa(${b.id})">Futa</button>` : ''}
+      </div></div>`;
   });
-  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa bado. Weka ya kwanza!</p>';
+  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa bado.</p>';
 }
 
 function nunua(jina){
-  window.open('https://wa.me/255653243898?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20SOKO%20LA%20VIJI','_blank');
-}
-
-if(currentUser){
-  document.getElementById('loginBox').classList.add('hidden');
-  document.getElementById('sokoBox').classList.remove('hidden');
-  document.getElementById('userUsername').innerText = '@' + currentUser.username;
-  hesabuMauzo();
-  onyeshaBidhaa();
+  window.open('https://wa.me/25565324389?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20SOKO%20LA%20VIJI','_blank');
 }
 </script>
 </body>
