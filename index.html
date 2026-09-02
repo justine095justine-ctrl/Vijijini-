@@ -9,15 +9,34 @@ body{font-family:Arial;margin:0;padding:10px;background:#f0fdf4}
 h1{color:#16a34a;text-align:center}
 .box{background:white;padding:15px;border-radius:10px;max-width:500px;margin:10px auto;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
 input,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px}
-button{background:#16a34a;color:white;padding:10px 20px;border:none;border-radius:5px;cursor:pointer;width:100%}
+button{background:#16a34a;color:white;padding:10px 20px;border:none;border-radius:5px;cursor:pointer;width:100%;margin:5px 0}
 button:hover{background:#15803d}
+.btn-ingia{background:#2563eb}
+.btn-toka{background:#dc2626}
 .product{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:8px}
 .price{color:#16a34a;font-weight:bold;font-size:18px}
+.hidden{display:none}
 </style>
 </head>
 <body>
 <h1>VIJIJINI 🌱</h1>
 <p style="text-align:center">Soko la Bidhaa za Vijana</p>
+
+<!-- SEHEMU YA KUINGIA -->
+<div class="box" id="loginBox">
+<h2>Jisajili / Ingia</h2>
+<input type="email" id="email" placeholder="Barua pepe">
+<input type="password" id="pass" placeholder="Nywila">
+<button onclick="jisajili()">Jisajili</button>
+<button class="btn-ingia" onclick="ingia()">Ingia</button>
+<p class="msg" id="msg" style="text-align:center;font-weight:bold"></p>
+</div>
+
+<!-- SEHEMU YA SOKO -->
+<div id="sokoBox" class="hidden">
+<div class="box">
+<p>Karibu: <b id="userEmail"></b> <button class="btn-toka" onclick="toka()" style="width:100px;float:right">Toka</button></p>
+</div>
 
 <div class="box">
 <h2>Weka Bidhaa Yako</h2>
@@ -31,22 +50,53 @@ button:hover{background:#15803d}
 <h2>Bidhaa Zilizopo</h2>
 <div id="orodha"></div>
 </div>
+</div>
 
 <script>
 let bidhaa = JSON.parse(localStorage.getItem('bidhaa')) || [];
+let watumiaji = JSON.parse(localStorage.getItem('watumiaji')) || {};
+
+function jisajili(){
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('pass').value;
+  if(email && pass){
+    watumiaji[email] = pass;
+    localStorage.setItem('watumiaji', JSON.stringify(watumiaji));
+    msg('Hongera! Umejisajili. Sasa bofya Ingia','green');
+  } else { msg('Jaza email na nywila','red') }
+}
+
+function ingia(){
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('pass').value;
+  if(watumiaji[email] === pass){
+    localStorage.setItem('user', email);
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('sokoBox').classList.remove('hidden');
+    document.getElementById('userEmail').innerText = email;
+    onyeshaBidhaa();
+  } else { msg('Email au Nywila sio sahihi','red') }
+}
+
+function toka(){
+  localStorage.removeItem('user');
+  document.getElementById('loginBox').classList.remove('hidden');
+  document.getElementById('sokoBox').classList.add('hidden');
+}
+
+function msg(text,color){
+  document.getElementById('msg').innerHTML = text;
+  document.getElementById('msg').style.color = color;
+}
 
 function ongezaBidhaa(){
   const jina = document.getElementById('jina').value;
   const bei = document.getElementById('bei').value;
   const maelezo = document.getElementById('maelezo').value;
-  
   if(jina && bei){
     bidhaa.push({jina, bei, maelezo});
     localStorage.setItem('bidhaa', JSON.stringify(bidhaa));
     onyeshaBidhaa();
-    document.getElementById('jina').value = '';
-    document.getElementById('bei').value = '';
-    document.getElementById('maelezo').value = '';
     alert('Bidhaa imeongezwa!');
   }
 }
@@ -58,17 +108,23 @@ function onyeshaBidhaa(){
       <h3>${b.jina}</h3>
       <p class="price">${b.bei} TZS</p>
       <p>${b.maelezo}</p>
-      <button onclick="nunua('${b.jina}')">NUNUA SASA</button>
+      <button onclick="nunua('${b.jina}')">NUNUA KWA WHATSAPP</button>
     </div>`;
   });
-  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa bado. Weka yako ya kwanza!</p>';
+  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa bado.</p>';
 }
 
 function nunua(jina){
-  alert('Nenda WhatsApp: 0712345678 kusema unataka: ' + jina);
+  window.open('https://wa.me/255712345678?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20VIJIJINI','_blank');
 }
 
-onyeshaBidhaa();
+// Kama tayari ameingia
+if(localStorage.getItem('user')){
+  document.getElementById('loginBox').classList.add('hidden');
+  document.getElementById('sokoBox').classList.remove('hidden');
+  document.getElementById('userEmail').innerText = localStorage.getItem('user');
+  onyeshaBidhaa();
+}
 </script>
 </body>
 </html>
