@@ -5,18 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIJI APP</title>
 <style>
-body{background:#0f172a;color:white;margin:0;padding:20px;font-family:Arial;text-align:center}
-h1{color:#60a5fa}
-.note{background:#1e3a8a;padding:12px;border-radius:10px;margin:20px 0;color:#60a5fa;font-weight:bold}
-.btn{display:block;background:#3b82f6;padding:18px;margin:12px 0;border-radius:12px;color:white;text-decoration:none;font-weight:bold;font-size:18px}
+body{font-family:'Segoe UI', Arial;margin:0;padding:0;background:#0f172a;display:flex;justify-content:center;align-items:center;height:100vh}
+.container{text-align:center;width:90%;max-width:400px}
+.logo{font-size:40px;margin-bottom:10px}
+h1{color:#60a5fa;font-size:32px;margin:0}
+p{color:#94a3b8;margin-bottom:30px}
+.menu-btn{display:block;width:100%;padding:20px;margin:15px 0;border:none;border-radius:15px;font-size:18px;font-weight:bold;cursor:pointer;color:white;transition:0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+.menu-btn:hover{transform:scale(1.03)}
+.btn-soko{background:linear-gradient(135deg, #3b82f6, #2563eb)}
+.btn-skills{background:linear-gradient(135deg, #10b981, #059669)}
+.btn-pay{background:linear-gradient(135deg, #f59e0b, #d97706)}
+.footer{color:#64748b;font-size:12px;margin-top:30px}
 </style>
 </head>
 <body>
+<div class="container">
+  <div class="logo">🚀</div>
   <h1>VIJI APP</h1>
-  <div class="note">Tunakata 5% tu kwenye kila mauzo</div>
-  
-  <a href="soko.html" class="btn">1. SOKO - Weka Bidhaa</a>
-  <a href="skills.html" class="btn">2. VITABU - Weka Huduma</a>
-  <a href="pay.html" class="btn" style="background:#10b981">3. VIJI PAY - Pokea Pesa</a>
+  <p>Chagua unachotaka kufanya leo</p>
+
+  <button class="menu-btn btn-soko" onclick="window.location='soko.html'">
+    🛍️ VIJI SOKONI
+  </button>
+
+  <button class="menu-btn btn-skills" onclick="window.location='skills.html'">
+    📚 VIJI SKILLS
+  </button>
+
+  <button class="menu-btn btn-pay" onclick="alert('VIJI PAY inakuja hivi karibuni!')">
+    💰 VIJI PAY
+  </button>
+
+  <p class="footer">© 2026 Viji App. Fanya Pesa na Ujuzi</p>
+</div>
 </body>
 </html>
