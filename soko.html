@@ -2,24 +2,33 @@
 <html lang="sw">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Soko</title>
+<title>SOKO - VIJI</title>
 <style>
 body{background:#0f172a;color:white;padding:15px;font-family:Arial}
-.box{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:15px}
-input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:1px solid #334155;border-radius:10px;color:white;font-size:16px}
-.btn{width:100%;padding:15px;background:#10b981;color:white;border:none;border-radius:10px;font-weight:bold;font-size:17px}
-.card{background:#1e293b;padding:15px;border-radius:12px;margin:10px 0}
+h2{color:#60a5fa;text-align:center}
+.box{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:20px}
+input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:2px solid #334155;border-radius:10px;color:white;font-size:16px}
+.btn{width:100%;padding:15px;background:#10b981;color:white;border:none;border-radius:10px;font-weight:bold;font-size:17px;cursor:pointer}
+.card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:10px;margin-bottom:10px}
+.wa-btn{display:inline-block;background:#25D366;padding:12px 20px;border-radius:8px;color:white;text-decoration:none;font-weight:bold;margin-top:10px}
+#preview{max-width:100%;height:150px;object-fit:cover;border-radius:10px;margin:10px 0;display:none}
 </style>
 </head>
 <body>
-<h2 style="color:#60a5fa">SOKO LA VIJI</h2>
+<h2>SOKO LA VIJI</h2>
 
 <div class="box">
   <h3>Weka Bidhaa Yako</h3>
   <input id="jina" placeholder="Jina la bidhaa: Mfano Simu">
   <input id="bei" type="number" placeholder="Bei TZS: Mfano 200000">
-  <input id="namba" placeholder="Namba yako ya M-Pesa/Tigo">
-  <textarea id="maelezo" placeholder="Maelezo mafupi"></textarea>
+  
+  <label style="color:#94a3b8">Chagua Picha ya Bidhaa</label>
+  <input id="picha" type="file" accept="image/*" onchange="somaPicha(event)">
+  <img id="preview">
+  
+  <input id="whatsapp" type="tel" placeholder="Namba ya WhatsApp: 0653243898">
+  <textarea id="maelezo" placeholder="Maelezo mafupi ya bidhaa"></textarea>
   <button class="btn" onclick="weka()">Weka Sokoni</button>
 </div>
 
@@ -28,37 +37,50 @@ input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:1p
 
 <script>
 let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
+let pichaBase64 = '';
+
+function somaPicha(e){
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(event){
+    pichaBase64 = event.target.result;
+    document.getElementById('preview').src = pichaBase64;
+    document.getElementById('preview').style.display = 'block';
+  }
+  reader.readAsDataURL(file);
+}
 
 function weka(){
   let b = {
-    jina: document.getElementById('jina').value,
-    bei: document.getElementById('bei').value,
-    namba: document.getElementById('namba').value,
-    maelezo: document.getElementById('maelezo').value
+    jina: jina.value,
+    bei: bei.value,
+    picha: pichaBase64,
+    whatsapp: whatsapp.value,
+    maelezo: maelezo.value
   };
-  if(!b.jina || !b.bei){alert('Jaza jina na bei');return}
+  if(!b.jina ||!b.bei ||!b.whatsapp ||!b.picha){alert('Jaza YOTE ikiwemo Picha');return}
   bidhaa.push(b);
   localStorage.setItem('vijiBidhaa', JSON.stringify(bidhaa));
   onyesha();
-  alert('Bidhaa imewekwa!');
+  alert('Bidhaa imewekwa Sokoni!');
+  jina.value=''; bei.value=''; picha.value=''; whatsapp.value=''; maelezo.value='';
+  preview.style.display='none'; pichaBase64='';
 }
 
 function onyesha(){
   let html = '';
   bidhaa.forEach((b,i)=>{
+    let namba = '255' + b.whatsapp.replace(/^0/,'');
+    let linkWa = `https://wa.me/${namba}?text=Niaje%20naomba%20bei%20ya%20${b.jina}`;
     html += `<div class="card">
+      <img src="${b.picha}">
       <h4>${b.jina}</h4>
       <p><b>Bei:</b> ${b.bei} TZS</p>
       <p>${b.maelezo}</p>
-      <p><b>Wasiliana:</b> ${b.namba}</p>
-      <button style="background:#3b82f6;padding:10px;border:none;border-radius:8px;color:white" onclick="nunua('${b.namba}',${b.bei})">Nunua Sasa</button>
+      <a href="${linkWa}" target="_blank" class="wa-btn">💬 Wasiliana WhatsApp</a>
     </div>`
   });
   document.getElementById('orodha').innerHTML = html;
-}
-
-function nunua(namba,bei){
-  alert('Lipa kwa: '+namba+'\nKiasi: '+bei+' TZS\nBaada ya kulipa mpe ushahidi muuzaji');
 }
 
 onyesha();
