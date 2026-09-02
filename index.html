@@ -5,24 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SOKO LA VIJI 🛒</title>
 <style>
-body{font-family:'Segoe UI', Arial;margin:0;padding:10px;background:#fdf8f2} /* Background ya Beige ya udongo */
-.header{background:linear-gradient(135deg, #166534, #16a34a);color:white;padding:18px;border-radius:15px;text-align:center;margin-bottom:15px;box-shadow:0 4px 15px rgba(22,101,52,0.2)}
+body{font-family:'Segoe UI', Arial;margin:0;padding:10px;background:#0f172a} /* BLUE BLACK Background */
+.header{background:linear-gradient(135deg, #1e3a8a, #1e293b);color:white;padding:20px;border-radius:15px;text-align:center;margin-bottom:15px;box-shadow:0 4px 20px rgba(30,58,138,0.3)}
 .header h1{margin:0;font-size:26px}
-.box{background:#ffffff;padding:18px;border-radius:15px;max-width:700px;margin:12px auto;box-shadow:0 4px 15px rgba(22,101,52,0.08);border:1px solid #dcfce7}
-input,textarea,select{width:95%;padding:12px;margin:8px 0;border:2px solid #dcfce7;border-radius:10px;background:#f0fdf4;font-size:15px}
-input:focus, textarea:focus{outline:none;border-color:#16a34a;background:white}
-button{background:linear-gradient(135deg, #16a34a, #15803d);color:white;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;width:100%;margin:8px 0;font-weight:bold;font-size:16px}
+.box{background:#1e293b;padding:20px;border-radius:15px;max-width:700px;margin:15px auto;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #334155;color:#e2e8f0}
+input,textarea,select{width:95%;padding:14px;margin:8px 0;border:2px solid #334155;border-radius:10px;background:#0f172a;color:#e2e8f0;font-size:15px}
+input:focus, textarea:focus{outline:none;border-color:#3b82f6;background:#1e293b}
+input::placeholder, textarea::placeholder{color:#64748b}
+button{background:linear-gradient(135deg, #3b82f6, #2563eb);color:white;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;width:100%;margin:8px 0;font-weight:bold;font-size:16px}
 button:hover{transform:scale(1.02)}
 .btn-danger{background:linear-gradient(135deg, #dc2626, #b91c1c)}
-.product{display:flex;gap:15px;border:2px solid #dcfce7;padding:15px;margin:15px 0;border-radius:12px;background:#ffffff}
-.product img{width:120px;height:120px;object-fit:cover;border-radius:10px;border:2px solid #f0fdf4}
-.product-info{flex:1}
-.price{color:#166534;font-weight:bold;font-size:22px}
-.category-tag{background:#dcfce7;color:#166534;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
+.product{display:flex;gap:15px;border:2px solid #334155;padding:15px;margin:15px 0;border-radius:12px;background:#1e293b}
+.product img{width:120px;height:120px;object-fit:cover;border-radius:10px;border:2px solid #334155}
+.product-info{flex:1; word-wrap:break-word}
+.price{color:#60a5fa;font-weight:bold;font-size:22px}
+.category-tag{background:#1e3a8a;color:#60a5fa;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
 .hidden{display:none}
 .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:15px}
-.seller-info{font-size:12px;color:#4b5563;margin-top:8px;background:#f0fdf4;padding:6px;border-radius:6px}
-h2{color:#166534}
+.seller-info{font-size:12px;color:#94a3b8;margin-top:8px;background:#0f172a;padding:6px;border-radius:6px}
+h2{color:#60a5fa}
+p{color:#cbd5e1}
 </style>
 </head>
 <body>
@@ -36,7 +38,7 @@ h2{color:#166534}
 <input type="email" id="email" placeholder="Barua pepe">
 <input type="password" id="pass" placeholder="Nywila">
 <button onclick="jisajili()">Jisajili</button>
-<button style="background:linear-gradient(135deg, #2563eb, #1d4ed8)" onclick="ingia()">Ingia</button>
+<button style="background:linear-gradient(135deg, #6366f1, #4f46e5)" onclick="ingia()">Ingia</button>
 <p id="msg" style="text-align:center;font-weight:bold"></p>
 </div>
 
@@ -85,8 +87,8 @@ function jisajili(){
   if(email && pass){
     watumiaji[email] = pass;
     localStorage.setItem('watumiaji', JSON.stringify(watumiaji));
-    msg('Umejisajili! Sasa Ingia','green');
-  } else { msg('Jaza vyote','red') }
+    msg('Umejisajili! Sasa Ingia','60a5fa');
+  } else { msg('Jaza vyote','ef4444') }
 }
 
 function ingia(){
@@ -100,7 +102,7 @@ function ingia(){
     document.getElementById('userEmail').innerText = email;
     hesabuMauzo();
     onyeshaBidhaa();
-  } else { msg('Email au Nywila sio sahihi','red') }
+  } else { msg('Email au Nywila sio sahihi','ef4444') }
 }
 
 function toka(){
@@ -148,12 +150,12 @@ function onyeshaBidhaa(){
   filtered.forEach(b => {
     const niYangu = b.mmiliki === currentUser;
     const category = b.category || "Nyingine";
-    const picha = b.picha || "https://via.placeholder.com/120/16a34a/ffffff?text=VIJIJINI";
+    const picha = b.picha || "https://via.placeholder.com/120/3b82f6/ffffff?text=VIJIJINI";
     html += `<div class="product">
       <img src="${picha}">
       <div class="product-info">
         <span class="category-tag">${category}</span>
-        <h3>${b.jina}</h3>
+        <h3 style="color:#f8fafc">${b.jina}</h3>
         <p class="price">${Number(b.bei).toLocaleString()} TZS</p>
         <p>${b.maelezo}</p>
         ${niYangu? `<p class="seller-info"><b>Imeli yako:</b> ${b.mmiliki}</p>` : `<p class="seller-info"><b>Muuzaji:</b> Amefichwa</p>`}
