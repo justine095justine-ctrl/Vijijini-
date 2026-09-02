@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viji Skills</title>
+<style>body{background:#0f172a;color:white;padding:15px;font-family:Arial}.box{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:15px}input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:1px solid #334155;border-radius:10px;color:white}.btn{width:100%;padding:15px;background:#10b981;color:white;border:none;border-radius:10px;font-weight:bold}.card{background:#1e293b;padding:15px;border-radius:12px;margin:10px 0}</style>
+</head>
+<body>
+<h2 style="color:#60a5fa">VIJI SKILLS</h2>
+<p style="color:#94a3b8">Weka huduma yako: Ufundi, Design, Uchoraji nk</p>
+
+<div class="box">
+  <h3>Tangaza Huduma</h3>
+  <input id="huduma" placeholder="Jina la huduma: Mfano Uchoraji">
+  <input id="bei" type="number" placeholder="Bei TZS">
+  <input id="namba" placeholder="Namba yako">
+  <textarea id="maelezo" placeholder="Maelezo ya huduma"></textarea>
+  <button class="btn" onclick="weka()">Weka Tangazo</button>
+</div>
+
+<h3>Huduma Zilizopo</h3>
+<div id="orodha"></div>
+
+<script>
+let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
+function weka(){
+  let s = {huduma:huduma.value, bei:bei.value, namba:namba.value, maelezo:maelezo.value};
+  if(!s.huduma || !s.bei){alert('Jaza yote');return}
+  skills.push(s); localStorage.setItem('vijiSkills', JSON.stringify(skills)); onyesha(); alert('Imewekwa!');
+}
+function onyesha(){
+  let html=''; skills.forEach(s=>{html+=`<div class="card"><h4>${s.huduma}</h4><p><b>Bei:</b> ${s.bei} TZS</p><p>${s.maelezo}</p><p><b>Piga:</b> ${s.namba}</p></div>`});
+  orodha.innerHTML=html;
+}
+onyesha();
+</script>
+</body>
+</html>
