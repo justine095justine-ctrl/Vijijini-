@@ -9,10 +9,14 @@ h2{color:#60a5fa;text-align:center}
 .box{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:20px}
 input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:2px solid #334155;border-radius:10px;color:white;font-size:16px}
 .btn{width:100%;padding:15px;background:#10b981;color:white;border:none;border-radius:10px;font-weight:bold;font-size:17px;cursor:pointer}
+.btn:active{background:#059669}
 .card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0}
 .card img{width:100%;height:220px;object-fit:cover;border-radius:10px;margin-bottom:10px}
 .wa-btn{display:inline-block;background:#25D366;padding:12px 20px;border-radius:8px;color:white;text-decoration:none;font-weight:bold;margin-top:10px}
-#preview{max-width:100%;height:150px;object-fit:cover;border-radius:10px;margin:10px 0;display:none}
+#preview{max-width:100%;height:150px;object-fit:cover;border-radius:10px;margin:10px 0;display:none;border:2px solid #334155}
+.msg{padding:12px;border-radius:8px;text-align:center;margin:10px 0;display:none;font-weight:bold}
+.msg.ok{background:#065f46;color:#d1fae5}
+.msg.err{background:#7f1d1d;color:#fecaca}
 </style>
 </head>
 <body>
@@ -20,16 +24,18 @@ input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:2p
 
 <div class="box">
   <h3>Weka Bidhaa Yako</h3>
+  <div id="msg" class="msg"></div>
+  
   <input id="jina" placeholder="Jina la bidhaa: Mfano Simu">
   <input id="bei" type="number" placeholder="Bei TZS: Mfano 200000">
   
   <label style="color:#94a3b8">Chagua Picha ya Bidhaa</label>
-  <input id="picha" type="file" accept="image/*" onchange="somaPicha(event)">
+  <input id="pichaInput" type="file" accept="image/*">
   <img id="preview">
   
   <input id="whatsapp" type="tel" placeholder="Namba ya WhatsApp: 0653243898">
   <textarea id="maelezo" placeholder="Maelezo mafupi ya bidhaa"></textarea>
-  <button class="btn" onclick="weka()">Weka Sokoni</button>
+  <button class="btn" id="btnWeka">Weka Sokoni</button>
 </div>
 
 <h3>Bidhaa Zilizopo</h3>
@@ -39,18 +45,38 @@ input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:2p
 let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
 let pichaBase64 = '';
 
-function somaPicha(e){
+const jina = document.getElementById('jina');
+const bei = document.getElementById('bei');
+const whatsapp = document.getElementById('whatsapp');
+const maelezo = document.getElementById('maelezo');
+const pichaInput = document.getElementById('pichaInput');
+const preview = document.getElementById('preview');
+const btnWeka = document.getElementById('btnWeka');
+const msg = document.getElementById('msg');
+
+function showMsg(txt,type){
+  msg.innerText=txt; msg.className='msg '+type; msg.style.display='block';
+  setTimeout(()=>{msg.style.display='none'},3000);
+}
+
+pichaInput.addEventListener('change', function(e){
   const file = e.target.files[0];
+  if(!file) return;
   const reader = new FileReader();
   reader.onload = function(event){
     pichaBase64 = event.target.result;
-    document.getElementById('preview').src = pichaBase64;
-    document.getElementById('preview').style.display = 'block';
+    preview.src = pichaBase64;
+    preview.style.display = 'block';
   }
   reader.readAsDataURL(file);
-}
+});
 
-function weka(){
+btnWeka.addEventListener('click', function(){
+  if(!jina.value ||!bei.value ||!whatsapp.value ||!pichaBase64){
+    showMsg('Tafadhali jaza yote ikiwemo picha','err');
+    return;
+  }
+  
   let b = {
     jina: jina.value,
     bei: bei.value,
@@ -58,28 +84,35 @@ function weka(){
     whatsapp: whatsapp.value,
     maelezo: maelezo.value
   };
-  if(!b.jina ||!b.bei ||!b.whatsapp ||!b.picha){alert('Jaza YOTE ikiwemo Picha');return}
+  
   bidhaa.push(b);
   localStorage.setItem('vijiBidhaa', JSON.stringify(bidhaa));
+  
+  showMsg('Bidhaa imewekwa Sokoni!','ok');
   onyesha();
-  alert('Bidhaa imewekwa Sokoni!');
-  jina.value=''; bei.value=''; picha.value=''; whatsapp.value=''; maelezo.value='';
+  
+  // Safisha form
+  jina.value=''; bei.value=''; pichaInput.value=''; whatsapp.value=''; maelezo.value='';
   preview.style.display='none'; pichaBase64='';
-}
+});
 
 function onyesha(){
   let html = '';
-  bidhaa.forEach((b,i)=>{
-    let namba = '255' + b.whatsapp.replace(/^0/,'');
-    let linkWa = `https://wa.me/${namba}?text=Niaje%20naomba%20bei%20ya%20${b.jina}`;
-    html += `<div class="card">
-      <img src="${b.picha}">
-      <h4>${b.jina}</h4>
-      <p><b>Bei:</b> ${b.bei} TZS</p>
-      <p>${b.maelezo}</p>
-      <a href="${linkWa}" target="_blank" class="wa-btn">💬 Wasiliana WhatsApp</a>
-    </div>`
-  });
+  if(bidhaa.length === 0){
+    html = '<p style="text-align:center;color:#94a3b8">Hakuna bidhaa bado. Weka ya kwanza!</p>';
+  } else {
+    bidhaa.forEach((b,i)=>{
+      let namba = '255' + b.whatsapp.replace(/^0/,'');
+      let linkWa = `https://wa.me/${namba}?text=Niaje%20naomba%20bei%20ya%20${b.jina}`;
+      html += `<div class="card">
+        <img src="${b.picha}">
+        <h4>${b.jina}</h4>
+        <p><b>Bei:</b> ${b.bei} TZS</p>
+        <p>${b.maelezo}</p>
+        <a href="${linkWa}" target="_blank" class="wa-btn">💬 Wasiliana WhatsApp</a>
+      </div>`
+    });
+  }
   document.getElementById('orodha').innerHTML = html;
 }
 
