@@ -24,6 +24,7 @@ button:hover{transform:scale(1.02)}
 .seller-info{font-size:13px;color:#60a5fa;margin-top:8px;background:#0f172a;padding:8px;border-radius:6px;font-weight:bold}
 h2{color:#60a5fa}
 .saved-email{background:#1e3a8a;padding:12px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.preview-img{width:100px;height:100px;object-fit:cover;border-radius:10px;margin-top:10px;border:2px solid #3b82f6}
 </style>
 </head>
 <body>
@@ -46,7 +47,6 @@ h2{color:#60a5fa}
 
 <div id="fullFormBox">
   <input type="email" id="email" placeholder="Barua pepe">
-  <input type="text" id="username" placeholder="Chagua Username yako @mfano">
   <input type="password" id="pass" placeholder="Nywila">
   <button onclick="jisajili()">Jisajili</button>
   <button style="background:linear-gradient(135deg, #6366f1, #4f46e5)" onclick="ingiaKamili()">Ingia</button>
@@ -56,18 +56,33 @@ h2{color:#60a5fa}
 
 <div id="sokoBox" class="hidden">
 <div class="box">
-<p>Karibu: <b id="userUsername"></b> | Mauzo: <b id="mauzo">0 TZS</b>
+<p>Karibu: <b id="userEmail"></b> | Mauzo: <b id="mauzo">0 TZS</b>
 <button class="btn-danger" onclick="toka()" style="width:120px;float:right">Toka</button></p>
 </div>
-<div class="box"><h2>Weka Bidhaa Yako Mpya</h2>
+
+<div class="box">
+<h2>Weka Bidhaa Yako Mpya</h2>
 <input type="text" id="jina" placeholder="Jina la Bidhaa">
 <input type="number" id="bei" placeholder="Bei TZS">
 <select id="category"><option>Nguo</option><option>Viatu</option><option>Simu</option><option>Chakula</option><option>Huduma</option><option>Nyingine</option></select>
-<input type="text" id="picha" placeholder="Link ya picha kutoka Google">
+
+<label style="font-size:14px">Chagua Picha ya Bidhaa:</label>
+<input type="file" id="pichaFile" accept="image/*" onchange="previewPicha()">
+<img id="preview" class="preview-img hidden">
+
 <textarea id="maelezo" placeholder="Elezea bidhaa. Weka namba yako hapa pia"></textarea>
-<button onclick="ongezaBidhaa()">Weka Soko - BURE</button></div>
-<div class="box"><h2>Tafuta na Chuja</h2><input type="text" id="searchBox" placeholder="Tafuta bidhaa..." onkeyup="onyeshaBidhaa()"></div>
-<div class="box"><h2>Bidhaa Zilizopo</h2><div id="orodha" class="grid"></div></div>
+<button onclick="ongezaBidhaa()">Weka Soko - BURE</button>
+</div>
+
+<div class="box">
+<h2>Tafuta na Chuja</h2>
+<input type="text" id="searchBox" placeholder="Tafuta bidhaa..." onkeyup="onyeshaBidhaa()">
+</div>
+
+<div class="box">
+<h2>Bidhaa Zilizopo</h2>
+<div id="orodha" class="grid"></div>
+</div>
 </div>
 
 <script>
@@ -75,6 +90,7 @@ let bidhaa = JSON.parse(localStorage.getItem('bidhaa')) || [];
 let watumiaji = JSON.parse(localStorage.getItem('watumiaji')) || {};
 let currentUser = JSON.parse(localStorage.getItem('currentUserData'));
 let savedEmail = localStorage.getItem('savedEmail');
+let pichaBase64 = "";
 
 window.onload = function(){
   if(savedEmail && watumiaji[savedEmail]){
@@ -85,23 +101,35 @@ window.onload = function(){
   if(currentUser){
     document.getElementById('loginBox').classList.add('hidden');
     document.getElementById('sokoBox').classList.remove('hidden');
-    document.getElementById('userUsername').innerText = '@' + currentUser.username;
+    document.getElementById('userEmail').innerText = currentUser.email;
     hesabuMauzo();
     onyeshaBidhaa();
+  }
+}
+
+function previewPicha(){
+  const file = document.getElementById('pichaFile').files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      pichaBase64 = e.target.result;
+      document.getElementById('preview').src = pichaBase64;
+      document.getElementById('preview').classList.remove('hidden');
+    }
+    reader.readAsDataURL(file);
   }
 }
 
 function jisajili(){
   const email = document.getElementById('email').value;
   const pass = document.getElementById('pass').value;
-  const username = document.getElementById('username').value;
-  if(email && pass && username){
-    watumiaji[email] = {pass: pass, username: username};
+  if(email && pass){
+    watumiaji[email] = {pass: pass};
     localStorage.setItem('watumiaji', JSON.stringify(watumiaji));
-    localStorage.setItem('savedEmail', email); // HII INAKUMBUKA EMAIL
+    localStorage.setItem('savedEmail', email);
     msg('Umejisajili! Sasa Ingia','60a5fa');
     location.reload();
-  } else { msg('Jaza Email, Username na Nywila','ef4444') }
+  } else { msg('Jaza Email na Nywila','ef4444') }
 }
 
 function ingiaKamili(){
@@ -109,7 +137,7 @@ function ingiaKamili(){
   const pass = document.getElementById('pass').value;
   if(watumiaji[email] && watumiaji[email].pass === pass){
     localStorage.setItem('savedEmail', email);
-    currentUser = {email: email, username: watumiaji[email].username};
+    currentUser = {email: email};
     localStorage.setItem('currentUserData', JSON.stringify(currentUser));
     location.reload();
   } else { msg('Email au Nywila sio sahihi','ef4444') }
@@ -118,7 +146,7 @@ function ingiaKamili(){
 function ingiaHaraka(){
   const pass = document.getElementById('passLogin').value;
   if(watumiaji[savedEmail] && watumiaji[savedEmail].pass === pass){
-    currentUser = {email: savedEmail, username: watumiaji[savedEmail].username};
+    currentUser = {email: savedEmail};
     localStorage.setItem('currentUserData', JSON.stringify(currentUser));
     location.reload();
   } else { msg('Nywila sio sahihi','ef4444') }
@@ -141,11 +169,12 @@ function ongezaBidhaa(){
   const jina = document.getElementById('jina').value;
   const bei = document.getElementById('bei').value;
   const category = document.getElementById('category').value;
-  const picha = document.getElementById('picha').value;
   const maelezo = document.getElementById('maelezo').value;
   if(jina && bei){
-    bidhaa.push({id:Date.now(), jina, bei, category, picha, maelezo, mmilikiEmail:currentUser.email, mmilikiUsername:currentUser.username});
+    bidhaa.push({id:Date.now(), jina, bei, category, picha:pichaBase64, maelezo, mmilikiEmail:currentUser.email});
     localStorage.setItem('bidhaa', JSON.stringify(bidhaa));
+    pichaBase64 = "";
+    document.getElementById('preview').classList.add('hidden');
     onyeshaBidhaa();
     alert('Bidhaa imeongezwa!');
   }
@@ -173,11 +202,10 @@ function onyeshaBidhaa(){
     const niYangu = b.mmilikiEmail === currentUser.email;
     const category = b.category || "Nyingine";
     const picha = b.picha || "https://via.placeholder.com/120/3b82f6/ffffff?text=VIJIJINI";
-    const jinaMuuzaji = niYangu? `Wewe @${b.mmilikiUsername}` : `@${b.mmilikiUsername}`;
     html += `<div class="product"><img src="${picha}"><div class="product-info">
       <span class="category-tag">${category}</span><h3 style="color:#f8fafc">${b.jina}</h3>
       <p class="price">${Number(b.bei).toLocaleString()} TZS</p><p>${b.maelezo}</p>
-      <p class="seller-info">Muuzaji: ${jinaMuuzaji}</p>
+      <p class="seller-info">Muuzaji: ${niYangu? 'Wewe' : 'Amefichwa'}</p>
       <button onclick="nunua('${b.jina}')">NUNUA KWA WHATSAPP</button>
       ${niYangu? `<button class="btn-danger" onclick="futaBidhaa(${b.id})">Futa</button>` : ''}
       </div></div>`;
@@ -186,8 +214,8 @@ function onyeshaBidhaa(){
 }
 
 function nunua(jina){
-  window.open('https://wa.me/25565324389?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20SOKO%20LA%20VIJI','_blank');
+  window.open('https://wa.me/255712345678?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20SOKO%20LA%20VIJI','_blank');
 }
 </script>
 </body>
-</html>
+  </html>
