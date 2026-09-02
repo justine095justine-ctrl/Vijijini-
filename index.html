@@ -7,15 +7,20 @@
 <style>
 body{font-family:Arial;margin:0;padding:10px;background:#f0fdf4}
 h1{color:#16a34a;text-align:center}
-.box{background:white;padding:15px;border-radius:10px;max-width:500px;margin:10px auto;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-input,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px}
+.box{background:white;padding:15px;border-radius:10px;max-width:600px;margin:10px auto;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+input,textarea,select{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px}
 button{background:#16a34a;color:white;padding:10px 20px;border:none;border-radius:5px;cursor:pointer;width:100%;margin:5px 0}
 button:hover{background:#15803d}
 .btn-ingia{background:#2563eb}
 .btn-toka{background:#dc2626}
+.btn-category{background:#e5e7eb;color:#000;margin:5px 2px;width:auto;padding:8px 12px}
+.btn-category.active{background:#16a34a;color:white}
 .product{border:1px solid #ddd;padding:10px;margin:10px 0;border-radius:8px}
-.price{color:#16a34a;font-weight:bold;font-size:18px}
+.product img{width:100%;height:200px;object-fit:cover;border-radius:8px}
+.price{color:#16a34a;font-weight:bold;font-size:20px}
+.category-tag{background:#dcfce7;color:#16a34a;padding:3px 8px;border-radius:5px;font-size:12px}
 .hidden{display:none}
+#searchBox{width:90%;padding:12px;border:2px solid #16a34a}
 </style>
 </head>
 <body>
@@ -40,10 +45,32 @@ button:hover{background:#15803d}
 
 <div class="box">
 <h2>Weka Bidhaa Yako</h2>
-<input type="text" id="jina" placeholder="Jina la Bidhaa - mfano: Viatu">
+<input type="text" id="jina" placeholder="Jina la Bidhaa">
 <input type="number" id="bei" placeholder="Bei TZS">
+<select id="category">
+  <option value="Nguo">Nguo</option>
+  <option value="Viatu">Viatu</option>
+  <option value="Simu">Simu na Vifaa</option>
+  <option value="Gari">Magari</option>
+  <option value="Chakula">Chakula</option>
+  <option value="Nyingine">Nyingine</option>
+</select>
+<input type="text" id="picha" placeholder="Weka link ya picha kutoka Google">
 <textarea id="maelezo" placeholder="Elezea bidhaa yako"></textarea>
 <button onclick="ongezaBidhaa()">Weka Soko</button>
+</div>
+
+<div class="box">
+<h2>Tafuta Bidhaa</h2>
+<input type="text" id="searchBox" placeholder="Tafuta... mfano: viatu" onkeyup="tafta()">
+<div style="margin-top:10px">
+  <button class="btn-category active" onclick="chaguaCategory('Zote')">Zote</button>
+  <button class="btn-category" onclick="chaguaCategory('Nguo')">Nguo</button>
+  <button class="btn-category" onclick="chaguaCategory('Viatu')">Viatu</button>
+  <button class="btn-category" onclick="chaguaCategory('Simu')">Simu</button>
+  <button class="btn-category" onclick="chaguaCategory('Gari')">Gari</button>
+  <button class="btn-category" onclick="chaguaCategory('Chakula')">Chakula</button>
+</div>
 </div>
 
 <div class="box">
@@ -55,6 +82,7 @@ button:hover{background:#15803d}
 <script>
 let bidhaa = JSON.parse(localStorage.getItem('bidhaa')) || [];
 let watumiaji = JSON.parse(localStorage.getItem('watumiaji')) || {};
+let currentCategory = 'Zote';
 
 function jisajili(){
   const email = document.getElementById('email').value;
@@ -92,33 +120,55 @@ function msg(text,color){
 function ongezaBidhaa(){
   const jina = document.getElementById('jina').value;
   const bei = document.getElementById('bei').value;
+  const category = document.getElementById('category').value;
+  const picha = document.getElementById('picha').value;
   const maelezo = document.getElementById('maelezo').value;
+
   if(jina && bei){
-    bidhaa.push({jina, bei, maelezo});
+    bidhaa.push({jina, bei, category, picha, maelezo});
     localStorage.setItem('bidhaa', JSON.stringify(bidhaa));
     onyeshaBidhaa();
     alert('Bidhaa imeongezwa!');
   }
 }
 
+function chaguaCategory(cat){
+  currentCategory = cat;
+  document.querySelectorAll('.btn-category').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  onyeshaBidhaa();
+}
+
+function tafta(){
+  onyeshaBidhaa();
+}
+
 function onyeshaBidhaa(){
+  const search = document.getElementById('searchBox').value.toLowerCase();
+  let filtered = bidhaa.filter(b => {
+    const matchCat = currentCategory === 'Zote' || b.category === currentCategory;
+    const matchSearch = b.jina.toLowerCase().includes(search) || b.maelezo.toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+
   let html = '';
-  bidhaa.forEach(b => {
+  filtered.forEach(b => {
     html += `<div class="product">
+      ${b.picha? `<img src="${b.picha}" alt="${b.jina}">` : ''}
+      <span class="category-tag">${b.category}</span>
       <h3>${b.jina}</h3>
-      <p class="price">${b.bei} TZS</p>
+      <p class="price">${Number(b.bei).toLocaleString()} TZS</p>
       <p>${b.maelezo}</p>
       <button onclick="nunua('${b.jina}')">NUNUA KWA WHATSAPP</button>
     </div>`;
   });
-  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa bado.</p>';
+  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa kwenye category hii.</p>';
 }
 
 function nunua(jina){
-  window.open('https://wa.me/255712345678?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20VIJIJINI','_blank');
+  window.open('https://wa.me/255653243898?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20VIJIJINI','_blank');
 }
 
-// Kama tayari ameingia
 if(localStorage.getItem('user')){
   document.getElementById('loginBox').classList.add('hidden');
   document.getElementById('sokoBox').classList.remove('hidden');
