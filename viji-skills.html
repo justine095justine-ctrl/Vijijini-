@@ -1,38 +1,96 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viji Skills</title>
-<style>body{background:#0f172a;color:white;padding:15px;font-family:Arial}.box{background:#1e293b;padding:20px;border-radius:15px;margin-bottom:15px}input,textarea{width:100%;padding:14px;margin:8px 0;background:#0f172a;border:1px solid #334155;border-radius:10px;color:white}.btn{width:100%;padding:15px;background:#10b981;color:white;border:none;border-radius:10px;font-weight:bold}.card{background:#1e293b;padding:15px;border-radius:12px;margin:10px 0}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIJI SKILLS 📚</title>
+<style>
+body{font-family:'Segoe UI', Arial;margin:0;padding:10px;background:#0f172a}
+.header{background:linear-gradient(135deg, #1e3a8a, #1e293b);color:white;padding:20px;border-radius:15px;text-align:center;margin-bottom:15px}
+.box{background:#1e293b;padding:20px;border-radius:15px;max-width:700px;margin:15px auto;border:1px solid #334155;color:#e2e8f0}
+.course{display:flex;gap:15px;border:2px solid #334155;padding:15px;margin:15px 0;border-radius:12px;background:#1e293b}
+.price{color:#60a5fa;font-weight:bold;font-size:22px}
+.btn-buy{background:linear-gradient(135deg, #10b981, #059669);color:white;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold}
+.btn-back{background:linear-gradient(135deg, #3b82f6, #2563eb);color:white;padding:12px;border:none;border-radius:10px;width:100%;margin-bottom:15px}
+.btn-admin{background:linear-gradient(135deg, #f59e0b, #d97706);color:white;padding:12px;border:none;border-radius:10px;width:100%;margin-top:15px;font-weight:bold}
+#adminForm{display:none;background:#0f172a;padding:15px;border-radius:10px;margin-top:15px}
+input,textarea{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #334155;background:#1e293b;color:white}
+.level{background:#1e3a8a;color:#60a5fa;padding:4px 10px;border-radius:15px;font-size:11px}
+</style>
 </head>
 <body>
-<h2 style="color:#60a5fa">VIJI SKILLS</h2>
-<p style="color:#94a3b8">Weka huduma yako: Ufundi, Design, Uchoraji nk</p>
-
-<div class="box">
-  <h3>Tangaza Huduma</h3>
-  <input id="huduma" placeholder="Jina la huduma: Mfano Uchoraji">
-  <input id="bei" type="number" placeholder="Bei TZS">
-  <input id="namba" placeholder="Namba yako">
-  <textarea id="maelezo" placeholder="Maelezo ya huduma"></textarea>
-  <button class="btn" onclick="weka()">Weka Tangazo</button>
+<div class="header">
+<h1>VIJI SKILLS 📚</h1>
+<p>Jifunze Ujuzi. Anza Biashara Yako Leo</p>
 </div>
 
-<h3>Huduma Zilizopo</h3>
-<div id="orodha"></div>
+<button class="btn-back" onclick="window.location='index.html'">← Rudi Sokoni</button>
+
+<div class="box">
+<h2>📦 Maarifa ya Papo kwa Papo</h2>
+<div id="courseList"></div>
+
+<!-- HII NI BUTTON YAKO YA SIRI -->
+<button class="btn-admin" onclick="toggleAdmin()">+ Ongeza Kozi Mpya</button>
+
+<div id="adminForm">
+  <h3>Ongeza Kitabu/Kozi Mpya</h3>
+  <input type="text" id="jina" placeholder="Jina la Kozi mf: Siri za TikTok">
+  <input type="text" id="aina" placeholder="Aina mf: KITABU CHA PDF">
+  <textarea id="maelezo" placeholder="Maelezo ya kozi"></textarea>
+  <input type="number" id="bei" placeholder="Bei kwa TZS mf: 5000">
+  <button class="btn-buy" onclick="ongezaKozi()">Hifadhi Kozi</button>
+</div>
+
+</div>
 
 <script>
-let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
-function weka(){
-  let s = {huduma:huduma.value, bei:bei.value, namba:namba.value, maelezo:maelezo.value};
-  if(!s.huduma || !s.bei){alert('Jaza yote');return}
-  skills.push(s); localStorage.setItem('vijiSkills', JSON.stringify(skills)); onyesha(); alert('Imewekwa!');
+let kozi = JSON.parse(localStorage.getItem('vijiKozi')) || [
+  {jina:"Siri 50 za Kuuza Online Tanzania",aina:"KITABU CHA PDF",maelezo:"Jinsi ya kupata wateja 100 kwa wiki",bei:5000},
+  {jina:"Nakala 100 za WhatsApp",aina:"TEMPLATES",maelezo:"Nakili na kuweka tu",bei:7000}
+];
+
+function onyeshaKozi(){
+  let html = '';
+  kozi.forEach(k=>{
+    html += `<div class="course">
+      <div style="flex:1">
+        <span class="level">${k.aina}</span>
+        <h3>${k.jina}</h3>
+        <p>${k.maelezo}</p>
+        <p class="price">${k.bei.toLocaleString()} TZS</p>
+        <button class="btn-buy" onclick="nunuaKozi('${k.jina}', ${k.bei})">NUNUA SASA - WHATSAPP</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('courseList').innerHTML = html;
 }
-function onyesha(){
-  let html=''; skills.forEach(s=>{html+=`<div class="card"><h4>${s.huduma}</h4><p><b>Bei:</b> ${s.bei} TZS</p><p>${s.maelezo}</p><p><b>Piga:</b> ${s.namba}</p></div>`});
-  orodha.innerHTML=html;
+
+function toggleAdmin(){
+  let form = document.getElementById('adminForm');
+  form.style.display = form.style.display==='none' ? 'block' : 'none';
 }
-onyesha();
+
+function ongezaKozi(){
+  let j = document.getElementById('jina').value;
+  let a = document.getElementById('aina').value;
+  let m = document.getElementById('maelezo').value;
+  let b = parseInt(document.getElementById('bei').value);
+  if(j && a && m && b){
+    kozi.push({jina:j,aina:a,maelezo:m,bei:b});
+    localStorage.setItem('vijiKozi', JSON.stringify(kozi));
+    onyeshaKozi();
+    alert('Kozi imeongezwa!');
+    toggleAdmin();
+  }
+}
+
+function nunuaKozi(jina, bei){
+  let msg = `Niaje VIJI SKILLS, nataka kununua "${jina}" kwa ${bei.toLocaleString()} TZS.`;
+  window.open('https://wa.me/255712345678?text=' + encodeURIComponent(msg),'_blank');
+}
+
+onyeshaKozi();
 </script>
 </body>
 </html>
