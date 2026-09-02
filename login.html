@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIJI</title>
+<style>
+body{margin:0;background:#0f172a;color:white;font-family:Arial;display:flex;justify-content:center;align-items:center;height:100vh}
+.card{background:#1e293b;padding:25px;border-radius:15px;width:90%;max-width:380px}
+h2{color:#60a5fa;text-align:center}
+input{width:100%;padding:14px;margin:10px 0;background:#0f172a;border:1px solid #334155;border-radius:10px;color:white;font-size:16px}
+.btn{width:100%;padding:14px;margin-top:10px;border:none;border-radius:10px;font-size:17px;font-weight:bold;cursor:pointer}
+.btn-blue{background:#3b82f6;color:white}
+.btn-green{background:#10b981;color:white}
+.switch{text-align:center;margin-top:15px;color:#94a3b8}
+.switch a{color:#60a5fa;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="card">
+  <p style="background:#1e3a8a;text-align:center;padding:10px;border-radius:8px;color:#60a5fa">Tunakata 5% tu</p>
+  
+  <div id="ingiaForm">
+    <h2>Ingia</h2>
+    <input id="namba1" placeholder="Namba ya simu">
+    <input id="neno1" type="password" placeholder="Nywila">
+    <button class="btn btn-blue" onclick="ingia()">Ingia</button>
+    <p class="switch">Huna akaunti? <a href="#" onclick="toggle()">Jisajili</a></p>
+  </div>
+
+  <div id="regForm" style="display:none">
+    <h2>Jisajili</h2>
+    <input id="jina2" placeholder="Jina lako">
+    <input id="namba2" placeholder="Namba ya simu">
+    <input id="neno2" type="password" placeholder="Nywila">
+    <button class="btn btn-green" onclick="jisajili()">Jisajili</button>
+    <p class="switch">Una akaunti? <a href="#" onclick="toggle()">Ingia</a></p>
+  </div>
+</div>
+
+<script>
+function toggle(){
+  let a=document.getElementById('ingiaForm');
+  let b=document.getElementById('regForm');
+  a.style.display = a.style.display=='none'?'block':'none';
+  b.style.display = b.style.display=='none'?'block':'none';
+}
+function jisajili(){
+  let j=document.getElementById('jina2').value;
+  let n=document.getElementById('namba2').value;
+  let ne=document.getElementById('neno2').value;
+  if(j && n && ne){localStorage.setItem('user_'+n,ne);alert('Umefanikiwa! Sasa Ingia');toggle();}
+  else{alert('Jaza yote')}
+}
+function ingia(){
+  let n=document.getElementById('namba1').value;
+  let ne=document.getElementById('neno1').value;
+  if(localStorage.getItem('user_'+n)==ne){localStorage.setItem('login',n);window.location='index.html'}
+  else{alert('Namba au nywila sio sahihi')}
+}
+if(localStorage.getItem('login')){window.location='index.html'}
+</script>
+</body>
+</html>
