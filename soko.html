@@ -1,249 +1,49 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOKO LA VIJI 🛒</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIJI SOKONI</title>
 <style>
-body{font-family:'Segoe UI', Arial;margin:0;padding:10px;background:#0f172a}
-.header{background:linear-gradient(135deg, #1e3a8a, #1e293b);color:white;padding:20px;border-radius:15px;text-align:center;margin-bottom:15px;box-shadow:0 4px 20px rgba(30,58,138,0.3)}
-.header h1{margin:0;font-size:26px}
-.box{background:#1e293b;padding:20px;border-radius:15px;max-width:700px;margin:15px auto;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #334155;color:#e2e8f0}
-input,textarea,select{width:95%;padding:14px;margin:8px 0;border:2px solid #334155;border-radius:10px;background:#0f172a;color:#e2e8f0;font-size:15px}
-.input-group{display:flex;gap:8px}
-.input-group select{width:30%}
-.input-group input{width:70%}
-input:focus, textarea:focus{outline:none;border-color:#3b82f6;background:#1e293b}
-button{background:linear-gradient(135deg, #3b82f6, #2563eb);color:white;padding:14px 20px;border:none;border-radius:10px;cursor:pointer;width:100%;margin:8px 0;font-weight:bold;font-size:16px}
-button:hover{transform:scale(1.02)}
-.btn-danger{background:linear-gradient(135deg, #dc2626, #b91c1c)}
-.btn-secondary{background:linear-gradient(135deg, #64748b, #475569)}
-.product{display:flex;gap:15px;border:2px solid #334155;padding:15px;margin:15px 0;border-radius:12px;background:#1e293b}
-.product img{width:120px;height:120px;object-fit:cover;border-radius:10px;border:2px solid #334155}
-.price{color:#60a5fa;font-weight:bold;font-size:22px}
-.fee{color:#f87171;font-size:12px}
-.category-tag{background:#1e3a8a;color:#60a5fa;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:bold}
-.hidden{display:none}
-.grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:15px}
-.seller-info{font-size:13px;color:#60a5fa;margin-top:8px;background:#0f172a;padding:8px;border-radius:6px;font-weight:bold}
-h2{color:#60a5fa}
-.saved-user{background:#1e3a8a;padding:12px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.preview-img{width:100px;height:100px;object-fit:cover;border-radius:10px;margin-top:10px;border:2px solid #3b82f6}
-.top-bar{display:flex;justify-content:space-between;align-items:center}
+body{background:#0f172a;color:white;padding:20px;font-family:Arial}
+h2{text-align:center;color:#3b82f6}
+.card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0}
+.card h3{color:#f59e0b;margin:0}
+.whatsapp-btn{background:#25D366;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="header">
-<h1>SOKO LA VIJI 🛒</h1>
-<p>Tunakata 5% tu kwenye kila mauzo</p>
+
+<h2>🛒 VIJI SOKONI</h2>
+<p style="text-align:center">Nunua/Uza vitu vyako hapa</p>
+
+<div class="card">
+  <h3>Viatu Nike Size 42</h3>
+  <p>Bei: 50,000 TZS</p>
+  <p>Mwanza</p>
+  <a href="https://wa.me/255653243898?text=Habari%20nahusika%20na%20Viatu%20Nike" class="whatsapp-btn" onclick="hifadhiMauzo('Viatu Nike', '50000')">Wasiliana WhatsApp</a>
 </div>
 
-<div class="box" id="loginBox">
-<h2>Jisajili / Ingia</h2>
-<div id="savedUserBox" class="hidden">
-  <p>Karibu tena</p>
-  <div class="saved-user">
-    <span id="savedUserText"></span>
-    <button class="btn-secondary" onclick="badiliAkaunti()" style="width:100px;padding:8px">Badili</button>
-  </div>
-  <input type="password" id="passLogin" placeholder="Andika Nywila yako">
-  <button onclick="ingiaHaraka()">Ingia</button>
+<div class="card">
+  <h3>Simu Samsung A12</h3>
+  <p>Bei: 180,000 TZS</p>
+  <p>DSM</p>
+  <a href="https://wa.me/255653243898?text=Habari%20nahusika%20na%20Samsung%20A12" class="whatsapp-btn" onclick="hifadhiMauzo('Samsung A12', '180000')">Wasiliana WhatsApp</a>
 </div>
 
-<div id="fullFormBox">
-  <div class="input-group">
-    <select id="countryCode">
-      <option value="+255">+255 TZ</option>
-      <option value="+256">+256 UG</option>
-      <option value="+254">+254 KE</option>
-    </select>
-    <input type="tel" id="simu" placeholder="7xxxxxxxx">
-  </div>
-  <input type="text" id="username" placeholder="Chagua Username: @mfano">
-  <input type="password" id="pass" placeholder="Nywila">
-  <button onclick="jisajili()">Jisajili</button>
-  <button style="background:linear-gradient(135deg, #6366f1, #4f46e5)" onclick="ingiaKamili()">Ingia</button>
-</div>
-<p id="msg" style="text-align:center;font-weight:bold"></p>
-</div>
-
-<div id="sokoBox" class="hidden">
-<div class="box">
-<div class="top-bar">
-  <p>Karibu: <b id="userUsername"></b> | Mauzo: <b id="mauzo">0 TZS</b></p>
-  <button class="btn-danger" onclick="toka()" style="width:120px">Toka</button>
-</div>
-</div>
-
-<div class="box">
-<h2>Weka Bidhaa Yako Mpya</h2>
-<input type="text" id="jina" placeholder="Jina la Bidhaa">
-<input type="number" id="bei" placeholder="Bei TZS - Tutaikata 5%">
-<select id="category"><option>Nguo</option><option>Viatu</option><option>Simu</option><option>Chakula</option><option>Huduma</option><option>Nyingine</option></select>
-
-<label style="font-size:14px">Chagua Picha ya Bidhaa:</label>
-<input type="file" id="pichaFile" accept="image/*" onchange="previewPicha()">
-<img id="preview" class="preview-img hidden">
-
-<textarea id="maelezo" placeholder="Elezea bidhaa. Weka namba yako hapa pia"></textarea>
-<button onclick="ongezaBidhaa()">Weka Soko - BURE</button>
-</div>
-
-<div class="box">
-<h2>Tafuta na Chuja</h2>
-<input type="text" id="searchBox" placeholder="Tafuta bidhaa..." onkeyup="onyeshaBidhaa()">
-</div>
-
-<div class="box">
-<h2>Bidhaa Zilizopo</h2>
-<div id="orodha" class="grid"></div>
-</div>
-</div>
+<a href="index.html" style="color:#94a3b8">← Rudi Nyuma</a>
 
 <script>
-let bidhaa = JSON.parse(localStorage.getItem('bidhaa')) || [];
-let watumiaji = JSON.parse(localStorage.getItem('watumiaji')) || {};
-let currentUser = JSON.parse(localStorage.getItem('currentUserData'));
-let savedUser = localStorage.getItem('savedUser');
-let pichaBase64 = "";
-const FEE = 0.05; // 5%
-
-window.onload = function(){
-  if(savedUser && watumiaji[savedUser]){
-    document.getElementById('savedUserBox').classList.remove('hidden');
-    document.getElementById('fullFormBox').classList.add('hidden');
-    document.getElementById('savedUserText').innerText = savedUser;
-  }
-  if(currentUser){
-    document.getElementById('loginBox').classList.add('hidden');
-    document.getElementById('sokoBox').classList.remove('hidden');
-    document.getElementById('userUsername').innerText = '@' + currentUser.username;
-    hesabuMauzo();
-    onyeshaBidhaa();
-  }
-}
-
-function previewPicha(){
-  const file = document.getElementById('pichaFile').files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      pichaBase64 = e.target.result;
-      document.getElementById('preview').src = pichaBase64;
-      document.getElementById('preview').classList.remove('hidden');
-    }
-    reader.readAsDataURL(file);
-  }
-}
-
-function jisajili(){
-  const code = document.getElementById('countryCode').value;
-  const simu = document.getElementById('simu').value;
-  const pass = document.getElementById('pass').value;
-  const username = document.getElementById('username').value;
-  const fullSimu = code + simu;
-  if(fullSimu && pass && username){
-    watumiaji[fullSimu] = {pass: pass, username: username};
-    localStorage.setItem('watumiaji', JSON.stringify(watumiaji));
-    localStorage.setItem('savedUser', fullSimu);
-    msg('Umejisajili! Sasa Ingia','60a5fa');
-    location.reload();
-  } else { msg('Jaza Namba, Username na Nywila','ef4444') }
-}
-
-function ingiaKamili(){
-  const code = document.getElementById('countryCode').value;
-  const simu = document.getElementById('simu').value;
-  const pass = document.getElementById('pass').value;
-  const fullSimu = code + simu;
-  if(watumiaji[fullSimu] && watumiaji[fullSimu].pass === pass){
-    localStorage.setItem('savedUser', fullSimu);
-    currentUser = {simu: fullSimu, username: watumiaji[fullSimu].username};
-    localStorage.setItem('currentUserData', JSON.stringify(currentUser));
-    location.reload();
-  } else { msg('Namba au Nywila sio sahihi','ef4444') }
-}
-
-function ingiaHaraka(){
-  const pass = document.getElementById('passLogin').value;
-  if(watumiaji[savedUser] && watumiaji[savedUser].pass === pass){
-    currentUser = {simu: savedUser, username: watumiaji[savedUser].username};
-    localStorage.setItem('currentUserData', JSON.stringify(currentUser));
-    location.reload();
-  } else { msg('Nywila sio sahihi','ef4444') }
-}
-
-function badiliAkaunti(){
-  localStorage.removeItem('savedUser');
-  location.reload();
-}
-
-function toka(){
-  localStorage.removeItem('currentUserData');
-  currentUser = null;
-  location.reload();
-}
-
-function msg(text,color){ document.getElementById('msg').innerHTML = text; document.getElementById('msg').style.color = color; }
-
-function ongezaBidhaa(){
-  const jina = document.getElementById('jina').value;
-  const bei = document.getElementById('bei').value;
-  const category = document.getElementById('category').value;
-  const maelezo = document.getElementById('maelezo').value;
-  if(jina && bei){
-    const beiHalisi = Number(bei);
-    const feeAmount = beiHalisi * FEE;
-    const unapopata = beiHalisi - feeAmount;
-    
-    bidhaa.push({id:Date.now(), jina, bei:beiHalisi, fee:feeAmount, unapopata, category, picha:pichaBase64, maelezo, mmilikiSimu:currentUser.simu, mmilikiUsername:currentUser.username});
-    localStorage.setItem('bidhaa', JSON.stringify(bidhaa));
-    pichaBase64 = "";
-    document.getElementById('preview').classList.add('hidden');
-    document.getElementById('pichaFile').value = "";
-    onyeshaBidhaa();
-    alert(`Bidhaa imeongezwa!\nBei: ${beiHalisi.toLocaleString()} TZS\nGarama yetu 5%: ${feeAmount.toLocaleString()} TZS\nUnapopata: ${unapopata.toLocaleString()} TZS`);
-  }
-}
-
-function futaBidhaa(id){
-  if(confirm('Una uhakika?')){
-    bidhaa = bidhaa.filter(b => b.id!== id);
-    localStorage.setItem('bidhaa', JSON.stringify(bidhaa));
-    onyeshaBidhaa();
-    hesabuMauzo();
-  }
-}
-
-function hesabuMauzo(){
-  let total = bidhaa.filter(b => b.mmilikiSimu === currentUser.simu).reduce((sum, b) => sum + b.unapopata, 0);
-  document.getElementById('mauzo').innerText = total.toLocaleString() + ' TZS';
-}
-
-function onyeshaBidhaa(){
-  const search = document.getElementById('searchBox').value.toLowerCase();
-  let filtered = bidhaa.filter(b => b.jina.toLowerCase().includes(search) || b.maelezo.toLowerCase().includes(search));
-  let html = '';
-  filtered.forEach(b => {
-    const niYangu = b.mmilikiSimu === currentUser.simu;
-    const category = b.category || "Nyingine";
-    const picha = b.picha || "https://via.placeholder.com/120/3b82f6/ffffff?text=VIJIJINI";
-    const jinaMuuzaji = niYangu? `Wewe @${b.mmilikiUsername}` : `@${b.mmilikiUsername}`;
-    html += `<div class="product"><img src="${picha}"><div class="product-info">
-      <span class="category-tag">${category}</span><h3 style="color:#f8fafc">${b.jina}</h3>
-      <p class="price">${Number(b.bei).toLocaleString()} TZS</p>
-      ${niYangu? `<p class="fee">-5% Fee: ${b.fee.toLocaleString()} TZS | Unapata: ${b.unapopata.toLocaleString()} TZS</p>` : ''}
-      <p>${b.maelezo}</p>
-      <p class="seller-info">Muuzaji: ${jinaMuuzaji}</p>
-      <button onclick="nunua('${b.jina}')">NUNUA KWA WHATSAPP</button>
-      ${niYangu? `<button class="btn-danger" onclick="futaBidhaa(${b.id})">Futa</button>` : ''}
-      </div></div>`;
-  });
-  document.getElementById('orodha').innerHTML = html || '<p>Hakuna bidhaa bado.</p>';
-}
-
-function nunua(jina){
-  window.open('https://wa.me/0653243898?text=Niaje%20nataka%20kunua%20' + jina + '%20kwenye%20SOKO%20LA%20VIJI','_blank');
+function hifadhiMauzo(bidhaa, bei){
+  let mauzo = JSON.parse(localStorage.getItem('vijiMauzo')) || [];
+  let mauzoMpya = {
+    id: Date.now(),
+    bidhaa: bidhaa,
+    bei: bei,
+    tarehe: new Date().toLocaleString('sw-TZ'),
+    status: 'Inasubiri'
+  };
+  mauzo.push(mauzoMpya);
+  localStorage.setItem('vijiMauzo', JSON.stringify(mauzo));
 }
 </script>
 </body>
