@@ -5,121 +5,125 @@
 <title>VIJI SKILLS</title>
 <style>
 body{background:#0f172a;color:white;padding:20px;font-family:Arial}
-h2{text-align:center;color:#8b5cf6}
-.card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0}
-.card h3{color:#f59e0b;margin:5px 0}
-.card img{width:100%;border-radius:10px;margin-bottom:10px;height:200px;object-fit:cover}
-.whatsapp-btn{background:#25D366;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold}
-.add-btn{background:#10b981;color:white;padding:15px;text-align:center;border-radius:12px;display:block;margin:20px 0;font-weight:bold;border:none;width:100%;font-size:16px;cursor:pointer}
+h2{text-align:center;color:#f59e0b}
+.card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0;text-align:center;position:relative}
+.card h3{color:#10b981;margin:5px 0}
+.card.mkoa{color:#94a3b8;font-size:14px}
+.card img{width:100%;border-radius:10px;margin-bottom:10px;height:180px;object-fit:cover}
+.call-btn{background:#10b981;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold}
+.add-btn{background:#f59e0b;color:white;padding:15px;text-align:center;border-radius:12px;display:block;margin:20px 0;font-weight:bold;border:none;width:100%;font-size:16px;cursor:pointer}
 .form-box{background:#1e293b;padding:20px;border-radius:12px;margin:20px 0;display:none}
-input, textarea{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:white}
+input{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:white}
+.score{color:#ec4899;font-weight:bold;font-size:18px;text-align:center}
+.btn-delete{position:absolute;top:10px;right:10px;background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<h2>📚 VIJI SKILLS</h2>
-<p style="text-align:center">Nunua/Uza ujuzi wako hapa</p>
+<h2>🔧 VIJI SKILLS</h2>
+<p class="score">Alama zako: <span id="alama">0</span></p>
 
-<button class="add-btn" onclick="onyeshaFomu()">+ ONGEZA SKILL MPYA</button>
+<button class="add-btn" onclick="onyeshaFomu()">+ ONGEZA FUNDI WAKO</button>
 
 <!-- FOMU YA KUONGEZA SKILL -->
 <div class="form-box" id="fomuSkill">
-  <h3>Ongeza Huduma Yako</h3>
-  <input type="text" id="jina" placeholder="Jina la Huduma. Mf: Fundisha Kiingereza">
-  <input type="text" id="jinaLako" placeholder="Jina lako - Mkoa. Mf: Amina - Mwanza">
-  <input type="number" id="bei" placeholder="Bei TZS">
-  <input type="text" id="muhtasari" placeholder="Maelezo mafupi. Mf: 5000 / Saa">
+  <h3>Ongeza Fundi Mpya</h3>
+  <input type="text" id="jina" placeholder="Jina la Fundi">
+  <input type="text" id="ufundi" placeholder="Anajua kazi gani? Mf: Umeme, Ufundi">
+  <input type="text" id="mkoa" placeholder="Mkoa: Mf. Mwanza">
+  <input type="text" id="namba" placeholder="Namba ya Simu / WhatsApp">
   <input type="file" id="picha" accept="image/*">
-  <button class="add-btn" style="background:#8b5cf6" onclick="hifadhiSkill()">HIFADHI SKILL</button>
+  <button class="add-btn" style="background:#10b981" onclick="hifadhiSkill()">HIFADHI FUNDI</button>
   <button class="add-btn" style="background:#64748b" onclick="fichaFomu()">FUNGA</button>
 </div>
 
-<!-- HAPA NDIO SKILLS ZITAONEKANA -->
+<!-- HAPA NDIO FUNDI WATAONEKANA -->
 <div id="orodhaSkills"></div>
 
 <a href="index.html" style="color:#94a3b8">← Rudi Nyuma</a>
 
 <script>
-let nambaYangu = "255 653 243 898"; // BADILI NA NAMBA YAKO
+let userID = localStorage.getItem('vijiUserID') || Date.now();
+localStorage.setItem('vijiUserID', userID);
+let alama = parseInt(localStorage.getItem('vijiAlama')) || 0;
+document.getElementById('alama').innerText = alama;
 
-// ONYESHA/FICHA FOMU
 function onyeshaFomu(){document.getElementById('fomuSkill').style.display='block';}
 function fichaFomu(){document.getElementById('fomuSkill').style.display='none';}
 
-// PAKIA SKILLS ZILIZOHIFADHIWA
+function ongezaAlama(pt){
+  alama += pt;
+  localStorage.setItem('vijiAlama', alama);
+  document.getElementById('alama').innerText = alama;
+  alert('Hongera! Umepata +'+pt+' alama. Jumla: '+alama);
+}
+
+// PAKIA FUNDI
 function pakiaSkills(){
   let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
   let div = document.getElementById('orodhaSkills');
   div.innerHTML = '';
-  
+
   if(skills.length == 0){
-    div.innerHTML = '<p style="text-align:center;color:#94a3b8">Hakuna skill bado. Bonyeza ONGEZA SKILL</p>';
+    div.innerHTML = '<p style="text-align:center;color:#94a3b8">Bado hakuna fundi. Kuwa wa kwanza kuongeza!</p>';
   }
-  
+
   skills.forEach(s => {
+    let btnFuta = (s.mwenyeSkill == userID)? `<button class="btn-delete" onclick="futaSkill(${s.id})">X</button>` : '';
     div.innerHTML += `
     <div class="card">
+      ${btnFuta}
       <img src="${s.picha}" alt="${s.jina}">
       <h3>${s.jina}</h3>
-      <p>${s.jinaLako}</p>
-      <p><b>Bei: ${parseInt(s.bei).toLocaleString()} TZS / ${s.muhtasari}</b></p>
-      <a href="https://wa.me/${nambaYangu}?text=Habari%20nahusika%20na%20${s.jina}" class="whatsapp-btn" onclick="hifadhiMauzo('${s.jina}', '${s.bei}')">Wasiliana WhatsApp</a>
+      <p><b>Kazi:</b> ${s.ufundi}</p>
+      <p class="mkoa"><b>Mkoa:</b> ${s.mkoa}</p>
+      <a href="https://wa.me/${s.namba}" target="_blank" class="call-btn" onclick="ongezaAlama(2)">0653243898</a>
     </div>
     `;
   });
 }
 
-// HIFADHI SKILL MPYA
+// HIFADHI FUNDI MPYA
 function hifadhiSkill(){
   let jina = document.getElementById('jina').value;
-  let jinaLako = document.getElementById('jinaLako').value;
-  let bei = document.getElementById('bei').value;
-  let muhtasari = document.getElementById('muhtasari').value;
+  let ufundi = document.getElementById('ufundi').value;
+  let mkoa = document.getElementById('mkoa').value;
+  let namba = document.getElementById('namba').value;
   let pichaFile = document.getElementById('picha').files[0];
-  
-  if(!jina ||!jinaLako ||!bei ||!muhtasari ||!pichaFile){alert('Tafadhali jaza yote'); return;}
-  
+
+  if(!jina ||!ufundi ||!mkoa ||!namba ||!pichaFile){alert('Tafadhali jaza yote'); return;}
+
   let reader = new FileReader();
   reader.onload = function(e){
     let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
     let skillMpya = {
       id: Date.now(),
-      jina: jina,
-      jinaLako: jinaLako,
-      bei: bei,
-      muhtasari: muhtasari,
-      picha: e.target.result // Hii ndio inahifadhi picha kwenye localStorage
+      jina: jina, ufundi: ufundi, mkoa: mkoa, namba: namba,
+      picha: e.target.result,
+      mwenyeSkill: userID // Hii ndio inazuia asifute wa wengine
     };
     skills.push(skillMpya);
     localStorage.setItem('vijiSkills', JSON.stringify(skills));
-    
-    alert('✅ Skill imeongezwa!');
-    document.getElementById('jina').value='';
-    document.getElementById('jinaLako').value='';
-    document.getElementById('bei').value='';
-    document.getElementById('muhtasari').value='';
-    document.getElementById('picha').value='';
-    fichaFomu();
-    pakiaSkills();
+
+    ongezaAlama(5); // Zawadi ya kuongeza fundi
+    alert('✅ Fundi ameongezwa! +5 alama');
+    document.getElementById('jina').value=''; document.getElementById('ufundi').value='';
+    document.getElementById('mkoa').value=''; document.getElementById('namba').value=''; document.getElementById('picha').value='';
+    fichaFomu(); pakiaSkills();
   }
   reader.readAsDataURL(pichaFile);
 }
 
-// HIFADHI MAUZO KWENDA ADMIN
-function hifadhiMauzo(bidhaa, bei){
-  let mauzo = JSON.parse(localStorage.getItem('vijiMauzo')) || [];
-  let mauzoMpya = {
-    id: Date.now(),
-    bidhaa: bidhaa,
-    bei: bei,
-    tarehe: new Date().toLocaleString('sw-TZ'),
-    status: 'Inasubiri'
-  };
-  mauzo.push(mauzoMpya);
-  localStorage.setItem('vijiMauzo', JSON.stringify(mauzo));
+// FUTA SKILL YAKO TU
+function futaSkill(id){
+  if(confirm('Una uhakika unataka kumfuta fundi huyu?')){
+    let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
+    skills = skills.filter(s => s.id!= id);
+    localStorage.setItem('vijiSkills', JSON.stringify(skills));
+    pakiaSkills();
+  }
 }
 
-// PAKIA UKURASA UNAPOFUNGUKA
 pakiaSkills();
 </script>
 </body>
