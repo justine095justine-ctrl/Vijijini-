@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIJI GAMES</title>
+<style>
+body{background:#0f172a;color:white;padding:20px;font-family:Arial;text-align:center}
+h2{color:#8b5cf6}
+.game-box{background:#1e293b;padding:30px;border-radius:15px;margin:20px 0}
+.btn-play{width:100%;padding:25px;background:#8b5cf6;color:white;border:none;border-radius:15px;font-size:22px;font-weight:bold;cursor:pointer}
+.btn-play:active{background:#7c3aed}
+.timer{font-size:40px;color:#f59e0b;font-weight:bold;margin:15px 0}
+.score{font-size:20px;color:#10b981}
+.coins{font-size:18px;color:#f59e0b;margin-top:10px}
+</style>
+</head>
+<body>
+
+<h2>🎮 VIJI GAMES</h2>
+<p>Cheza sekunde 30. Bonyeza haraka upate VIJI COINS!</p>
+
+<div class="game-box">
+  <div class="timer" id="time">30</div>
+  <button class="btn-play" id="btnBonyeza" disabled>BONYEZA HAPA</button>
+  <div class="score">Alama: <span id="alama">0</span></div>
+  <div class="coins">Umeshinda: <span id="coins">0</span> VIJI COINS</div>
+  <button class="btn-play" id="btnAnza" style="background:#10b981;margin-top:15px">ANZA KUCHEZA</button>
+</div>
+
+<script>
+let time = 30; let alama = 0; let interval;
+
+const btnBonyeza = document.getElementById('btnBonyeza');
+const btnAnza = document.getElementById('btnAnza');
+
+btnAnza.addEventListener('click', function(){
+  time=30; alama=0; 
+  btnBonyeza.disabled=false; btnAnza.style.display='none';
+  update();
+  interval = setInterval(()=>{
+    time--; update();
+    if(time<=0){maliza()}
+  },1000)
+});
+
+btnBonyeza.addEventListener('click', function(){
+  alama++; update();
+});
+
+function update(){
+  document.getElementById('time').innerText=time;
+  document.getElementById('alama').innerText=alama;
+  let coins = Math.floor(alama/10)*10; // Kila alama 10 = coins 10
+  document.getElementById('coins').innerText=coins;
+}
+
+function maliza(){
+  clearInterval(interval);
+  btnBonyeza.disabled=true; btnAnza.style.display='block';
+  alert('Mchezo umeisha! Umeshinda '+Math.floor(alama/10)*10+' VIJI COINS');
+}
+</script>
+
+</body>
+</html>
