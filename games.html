@@ -1,65 +1,112 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIJI GAMES</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
 <style>
-body{background:#0f172a;color:white;padding:20px;font-family:Arial;text-align:center}
-h2{color:#8b5cf6}
-.game-box{background:#1e293b;padding:30px;border-radius:15px;margin:20px 0}
-.btn-play{width:100%;padding:25px;background:#8b5cf6;color:white;border:none;border-radius:15px;font-size:22px;font-weight:bold;cursor:pointer}
-.btn-play:active{background:#7c3aed}
-.timer{font-size:40px;color:#f59e0b;font-weight:bold;margin:15px 0}
-.score{font-size:20px;color:#10b981}
-.coins{font-size:18px;color:#f59e0b;margin-top:10px}
+body{font-family:sans-serif;background:#0f172a;color:#fff;text-align:center;padding:20px;margin:0;}
+h1{color:#a855f7;}
+.card{background:#1e293b;padding:20px;border-radius:15px;max-width:400px;margin:20px auto;display:none;}
+.btn{width:100%;padding:15px;margin:10px 0;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;}
+.btn-purple{background:#a855f7;color:#fff;}
+.btn-green{background:#22c55e;color:#fff;}
+.btn-blue{background:#3b82f6;color:#fff;}
+.menu-btn{background:#334155;margin:10px 0;}
+.big{font-size:48px;font-weight:bold;color:#fbbf24;}
 </style>
 </head>
 <body>
 
-<h2>🎮 VIJI GAMES</h2>
-<p>Cheza sekunde 30. Bonyeza haraka upate VIJI COINS!</p>
+<h1>🎮 VIJI GAMES</h1>
+<p>Cheza upate VIJI COINS!</p>
 
-<div class="game-box">
-  <div class="timer" id="time">30</div>
-  <button class="btn-play" id="btnBonyeza" disabled>BONYEZA HAPA</button>
-  <div class="score">Alama: <span id="alama">0</span></div>
-  <div class="coins">Umeshinda: <span id="coins">0</span> VIJI COINS</div>
-  <button class="btn-play" id="btnAnza" style="background:#10b981;margin-top:15px">ANZA KUCHEZA</button>
+<!-- MENU YA GAMES -->
+<div id="menu" class="card" style="display:block;">
+  <h2>Chagua Game</h2>
+  <button class="btn menu-btn" onclick="anzaGame('clicker')">1. BONYEZA HARAKA</button>
+  <button class="btn menu-btn" onclick="anzaGame('memory')">2. KUMBUKA NAMBA</button>
+  <button class="btn menu-btn" onclick="anzaGame('math')">3. HESABU HARAKA</button>
+  <h3 style="color:#fbbf24;">VIJI COINS ZAKO: <span id="totalCoins">0</span></h3>
+</div>
+
+<!-- GAME 1: BONYEZA HARAKA -->
+<div id="clicker" class="card">
+  <h2>BONYEZA HARAKA</h2>
+  <div class="big" id="time1">30</div>
+  <button class="btn btn-purple" id="btnClick" onclick="clickScore()">BONYEZA HAPA</button>
+  <p style="color:#4ade80;">Alama: <span id="score1">0</span></p>
+  <p style="color:#fbbf24;">Umeshinda: <span id="coins1">0</span> VIJI COINS</p>
+  <button class="btn btn-green" onclick="anzaTimer(1)">ANZA KUCHEZA</button>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
+</div>
+
+<!-- GAME 2: KUMBUKA NAMBA -->
+<div id="memory" class="card">
+  <h2>KUMBUKA NAMBA</h2>
+  <div class="big" id="numMemory">?</div>
+  <input type="number" id="inputMemory" placeholder="Andika namba" style="padding:10px;width:80%;border-radius:5px;">
+  <button class="btn btn-blue" onclick="checkMemory()">THIBITISHA</button>
+  <p style="color:#4ade80;">Alama: <span id="score2">0</span></p>
+  <button class="btn btn-green" onclick="newMemory()">GAME MPYA</button>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
+</div>
+
+<!-- GAME 3: HESABU HARAKA -->
+<div id="math" class="card">
+  <h2>HESABU HARAKA</h2>
+  <div class="big" id="mathQ">2 + 2 = ?</div>
+  <input type="number" id="inputMath" placeholder="Jibu" style="padding:10px;width:80%;border-radius:5px;">
+  <button class="btn btn-blue" onclick="checkMath()">JIBU</button>
+  <p style="color:#4ade80;">Alama: <span id="score3">0</span></p>
+  <button class="btn btn-green" onclick="newMath()">SWALI JIPYA</button>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
 </div>
 
 <script>
-let time = 30; let alama = 0; let interval;
+let totalCoins = localStorage.getItem('vijiCoins') || 0;
+document.getElementById('totalCoins').innerText = totalCoins;
+let timer, score;
+let memoryNum;
 
-const btnBonyeza = document.getElementById('btnBonyeza');
-const btnAnza = document.getElementById('btnAnza');
-
-btnAnza.addEventListener('click', function(){
-  time=30; alama=0; 
-  btnBonyeza.disabled=false; btnAnza.style.display='none';
-  update();
-  interval = setInterval(()=>{
-    time--; update();
-    if(time<=0){maliza()}
-  },1000)
-});
-
-btnBonyeza.addEventListener('click', function(){
-  alama++; update();
-});
-
-function update(){
-  document.getElementById('time').innerText=time;
-  document.getElementById('alama').innerText=alama;
-  let coins = Math.floor(alama/10)*10; // Kila alama 10 = coins 10
-  document.getElementById('coins').innerText=coins;
+// MENU
+function anzaGame(id){
+  document.getElementById('menu').style.display='none';
+  document.getElementById(id).style.display='block';
+  if(id=='memory') newMemory();
+  if(id=='math') newMath();
+}
+function rudMenu(){
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  document.getElementById('menu').style.display='block';
+  document.getElementById('totalCoins').innerText = totalCoins;
 }
 
-function maliza(){
-  clearInterval(interval);
-  btnBonyeza.disabled=true; btnAnza.style.display='block';
-  alert('Mchezo umeisha! Umeshinda '+Math.floor(alama/10)*10+' VIJI COINS');
+// GAME 1: CLICKER
+function anzaTimer(game){
+  let t=30; score=0;
+  document.getElementById('score'+game).innerText=0;
+  timer=setInterval(()=>{
+    t--; document.getElementById('time'+game).innerText=t;
+    if(t<=0){clearInterval(timer); let coins=Math.floor(score/10); 
+      totalCoins=parseInt(totalCoins)+coins; localStorage.setItem('vijiCoins',totalCoins);
+      document.getElementById('coins'+game).innerText=coins; alert('Umeshinda '+coins+' VIJI COINS!');
+    }
+  },1000);
 }
+function clickScore(){score++; document.getElementById('score1').innerText=score;}
+
+// GAME 2: MEMORY
+function newMemory(){memoryNum=Math.floor(Math.random()*9000)+1000; document.getElementById('numMemory').innerText=memoryNum; setTimeout(()=>{document.getElementById('numMemory').innerText='?'},2000);}
+function checkMemory(){if(document.getElementById('inputMemory').value==memoryNum){score2=parseInt(document.getElementById('score2').innerText)+1; document.getElementById('score2').innerText=score2; totalCoins=parseInt(totalCoins)+2; localStorage.setItem('vijiCoins',totalCoins); alert('+2 VIJI COINS!');} newMemory();}
+
+// GAME 3: MATH
+function newMath(){let a=Math.floor(Math.random()*10)+1; let b=Math.floor(Math.random()*10)+1; window.ans=a+b; document.getElementById('mathQ').innerText=`${a} + ${b} = ?`;}
+function checkMath(){if(parseInt(document.getElementById('inputMath').value)==window.ans){score3=parseInt(document.getElementById('score3').innerText)+1; document.getElementById('score3').innerText=score3; totalCoins=parseInt(totalCoins)+1; localStorage.setItem('vijiCoins',totalCoins); alert('+1 VIJI COIN!');} newMath();}
+
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 </script>
-
 </body>
 </html>
