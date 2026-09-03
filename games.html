@@ -3,110 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIJI GAMES</title>
+<title>VIJI AKILI 5</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f172a">
 <style>
-body{font-family:sans-serif;background:#0f172a;color:#fff;text-align:center;padding:20px;margin:0;}
-h1{color:#a855f7;}
-.card{background:#1e293b;padding:20px;border-radius:15px;max-width:400px;margin:20px auto;display:none;}
-.btn{width:100%;padding:15px;margin:10px 0;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;}
+body{font-family:sans-serif;background:#0f172a;color:#fff;text-align:center;padding:15px;margin:0;}
+h1{color:#a855f7;margin:10px 0;}
+.card{background:#1e293b;padding:20px;border-radius:15px;max-width:450px;margin:15px auto;display:none;}
+.btn{width:100%;padding:14px;margin:8px 0;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;}
 .btn-purple{background:#a855f7;color:#fff;}
 .btn-green{background:#22c55e;color:#fff;}
-.btn-blue{background:#3b82f6;color:#fff;}
-.menu-btn{background:#334155;margin:10px 0;}
-.big{font-size:48px;font-weight:bold;color:#fbbf24;}
+.menu-btn{background:#334155;font-size:15px;}
+.big{font-size:28px;font-weight:bold;color:#fbbf24;margin:15px 0;}
+.option{background:#475569;padding:12px;margin:8px 0;border-radius:8px;cursor:pointer;font-size:15px;}
+.option:hover{background:#64748b;}
+input{padding:10px;width:90%;border-radius:8px;border:none;margin:10px 0;font-size:16px;}
 </style>
 </head>
 <body>
 
-<h1>🎮 VIJI GAMES</h1>
-<p>Cheza upate VIJI COINS!</p>
+<h1>🧠 VIJI AKILI 5</h1>
+<p>Tumia ubongo upate VIJI COINS!</p>
 
-<!-- MENU YA GAMES -->
+<!-- MENU YA GAMES 5 -->
 <div id="menu" class="card" style="display:block;">
-  <h2>Chagua Game</h2>
-  <button class="btn menu-btn" onclick="anzaGame('clicker')">1. BONYEZA HARAKA</button>
-  <button class="btn menu-btn" onclick="anzaGame('memory')">2. KUMBUKA NAMBA</button>
-  <button class="btn menu-btn" onclick="anzaGame('math')">3. HESABU HARAKA</button>
-  <h3 style="color:#fbbf24;">VIJI COINS ZAKO: <span id="totalCoins">0</span></h3>
+  <h2>Chagua Mtihani Wako</h2>
+  <button class="btn menu-btn" onclick="anzaGame('pattern')">1. KAMILISHA MFULIZO 🔢</button>
+  <button class="btn menu-btn" onclick="anzaGame('logic')">2. MASWALI YA MANTIKI 🤔</button>
+  <button class="btn menu-btn" onclick="anzaGame('memory')">3. KUMBUKA MPANGILIO 🎨</button>
+  <button class="btn menu-btn" onclick="anzaGame('word')">4. TENGENEZA NENO 🔤</button>
+  <button class="btn menu-btn" onclick="anzaGame('math')">5. HESABU NGUMU ➗</button>
+  <h3 style="color:#fbbf24;margin-top:20px;">VIJI COINS ZAKO: <span id="totalCoins">0</span></h3>
 </div>
 
-<!-- GAME 1: BONYEZA HARAKA -->
-<div id="clicker" class="card">
-  <h2>BONYEZA HARAKA</h2>
-  <div class="big" id="time1">30</div>
-  <button class="btn btn-purple" id="btnClick" onclick="clickScore()">BONYEZA HAPA</button>
-  <p style="color:#4ade80;">Alama: <span id="score1">0</span></p>
-  <p style="color:#fbbf24;">Umeshinda: <span id="coins1">0</span> VIJI COINS</p>
-  <button class="btn btn-green" onclick="anzaTimer(1)">ANZA KUCHEZA</button>
-  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
-</div>
+<!-- GAME 1: MFULULIZO -->
+<div id="pattern" class="card"><h2>Kamilisha Mfululizo</h2><div class="big" id="patternQ"></div><div id="patternOptions"></div><p>Alama: <span id="score1">0</span> | VIJI: <span id="coins1">0</span></p><button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button></div>
 
-<!-- GAME 2: KUMBUKA NAMBA -->
-<div id="memory" class="card">
-  <h2>KUMBUKA NAMBA</h2>
-  <div class="big" id="numMemory">?</div>
-  <input type="number" id="inputMemory" placeholder="Andika namba" style="padding:10px;width:80%;border-radius:5px;">
-  <button class="btn btn-blue" onclick="checkMemory()">THIBITISHA</button>
-  <p style="color:#4ade80;">Alama: <span id="score2">0</span></p>
-  <button class="btn btn-green" onclick="newMemory()">GAME MPYA</button>
-  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
-</div>
+<!-- GAME 2: MANTIKI -->
+<div id="logic" class="card"><h2>Swali la Mantiki</h2><div class="big" id="logicQ" style="font-size:18px;"></div><div id="logicOptions"></div><p>Alama: <span id="score2">0</span> | VIJI: <span id="coins2">0</span></p><button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button></div>
 
-<!-- GAME 3: HESABU HARAKA -->
-<div id="math" class="card">
-  <h2>HESABU HARAKA</h2>
-  <div class="big" id="mathQ">2 + 2 = ?</div>
-  <input type="number" id="inputMath" placeholder="Jibu" style="padding:10px;width:80%;border-radius:5px;">
-  <button class="btn btn-blue" onclick="checkMath()">JIBU</button>
-  <p style="color:#4ade80;">Alama: <span id="score3">0</span></p>
-  <button class="btn btn-green" onclick="newMath()">SWALI JIPYA</button>
-  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
-</div>
+<!-- GAME 3: KUMBUKA RANGI -->
+<div id="memory" class="card"><h2>Kumbuka Mpangilio</h2><p>Tazama rangi zikimulika</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:200px;margin:auto;">
+<div style="background:red;height:90px;border-radius:10px;" onclick="clickColor(0)"></div>
+<div style="background:blue;height:90px;border-radius:10px;" onclick="clickColor(1)"></div>
+<div style="background:green;height:90px;border-radius:10px;" onclick="clickColor(2)"></div>
+<div style="background:yellow;height:90px;border-radius:10px;" onclick="clickColor(3)"></div></div>
+<button class="btn btn-green" onclick="startMemory()">ANZA</button><p>Level: <span id="score3">0</span> | VIJI: <span id="coins3">0</span></p><button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button></div>
+
+<!-- GAME 4: TENGENEZA NENO -->
+<div id="word" class="card"><h2>Tengeneza Neno</h2><p>Tumia herufi hizi kutengeneza neno la Kiswahili</p><div class="big" id="wordLetters"></div><input type="text" id="wordInput" placeholder="Andika neno lako"><button class="btn btn-purple" onclick="checkWord()">THIBITISHA</button><p>Alama: <span id="score4">0</span> | VIJI: <span id="coins4">0</span></p><button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button></div>
+
+<!-- GAME 5: HESABU NGUMU -->
+<div id="math" class="card"><h2>Hesabu Ngumu</h2><div class="big" id="mathQ"></div><input type="number" id="mathInput" placeholder="Jibu lako"><button class="btn btn-purple" onclick="checkMath()">JIBU</button><p>Alama: <span id="score5">0</span> | VIJI: <span id="coins5">0</span></p><button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button></div>
 
 <script>
-let totalCoins = localStorage.getItem('vijiCoins') || 0;
+let totalCoins = parseInt(localStorage.getItem('vijiCoins')) || 0;
 document.getElementById('totalCoins').innerText = totalCoins;
-let timer, score;
-let memoryNum;
+function updateCoins(amount){totalCoins += amount;localStorage.setItem('vijiCoins', totalCoins);document.getElementById('totalCoins').innerText = totalCoins;}
+function anzaGame(id){document.getElementById('menu').style.display='none';document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById(id).style.display='block';if(id=='pattern')newPattern();if(id=='logic')newLogic();if(id=='word')newWord();if(id=='math')newMath();}
+function rudMenu(){document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById('menu').style.display='block';}
 
-// MENU
-function anzaGame(id){
-  document.getElementById('menu').style.display='none';
-  document.getElementById(id).style.display='block';
-  if(id=='memory') newMemory();
-  if(id=='math') newMath();
-}
-function rudMenu(){
-  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
-  document.getElementById('menu').style.display='block';
-  document.getElementById('totalCoins').innerText = totalCoins;
-}
+// 1. MFULIZO
+const patterns=[{q:"2,4,6,8,?",ans:10,opts:[9,10,11,12]},{q:"1,3,9,27,?",ans:81,opts:[54,72,81,90]},{q:"5,10,20,40,?",ans:80,opts:[60,70,80,90]},{q:"1,1,2,3,5,?",ans:8,opts:[7,8,9,10]}];
+function newPattern(){let p=patterns[Math.floor(Math.random()*patterns.length)];document.getElementById('patternQ').innerText=p.q;let html='';p.opts.sort(()=>Math.random()-0.5).forEach(o=>{html+=`<div class="option" onclick="checkAns(${o==p.ans},1,${o==p.ans?5:0})">${o}</div>`});document.getElementById('patternOptions').innerHTML=html;}
 
-// GAME 1: CLICKER
-function anzaTimer(game){
-  let t=30; score=0;
-  document.getElementById('score'+game).innerText=0;
-  timer=setInterval(()=>{
-    t--; document.getElementById('time'+game).innerText=t;
-    if(t<=0){clearInterval(timer); let coins=Math.floor(score/10); 
-      totalCoins=parseInt(totalCoins)+coins; localStorage.setItem('vijiCoins',totalCoins);
-      document.getElementById('coins'+game).innerText=coins; alert('Umeshinda '+coins+' VIJI COINS!');
-    }
-  },1000);
-}
-function clickScore(){score++; document.getElementById('score1').innerText=score;}
+// 2. MANTIKI
+const logics=[{q:"Mtu ana ndugu 3. Kila ndugu ana ndugu 1. Watu wangapi wote?",ans:"4",opts:["4","6","3","8"]},{q:"Kitu kinapanda lakini hakishuki. Ni nini?",ans:"Umri",opts:["Umri","Mvua","Ndege","Mti"]},{q:"Nina miguu 4 lakini siwezi kutembea. Ni nini?",ans:"Meza",opts:["Meza","Mbwa","Kiti","Gari"]}];
+function newLogic(){let l=logics[Math.floor(Math.random()*logics.length)];document.getElementById('logicQ').innerText=l.q;let html='';l.opts.sort(()=>Math.random()-0.5).forEach(o=>{html+=`<div class="option" onclick="checkAns('${o}'=='${l.ans}',2,'${o}'=='${l.ans}'?10:0)">${o}</div>`});document.getElementById('logicOptions').innerHTML=html;}
 
-// GAME 2: MEMORY
-function newMemory(){memoryNum=Math.floor(Math.random()*9000)+1000; document.getElementById('numMemory').innerText=memoryNum; setTimeout(()=>{document.getElementById('numMemory').innerText='?'},2000);}
-function checkMemory(){if(document.getElementById('inputMemory').value==memoryNum){score2=parseInt(document.getElementById('score2').innerText)+1; document.getElementById('score2').innerText=score2; totalCoins=parseInt(totalCoins)+2; localStorage.setItem('vijiCoins',totalCoins); alert('+2 VIJI COINS!');} newMemory();}
+// 3. KUMBUKA RANGI
+let seq=[],userSeq=[],level=0;
+function startMemory(){seq=[];level=0;nextLevel();}
+function nextLevel(){level++;userSeq=[];document.getElementById('score3').innerText=level;seq.push(Math.floor(Math.random()*4));playSeq();}
+function playSeq(){let i=0;let boxes=document.querySelectorAll('#memory div[onclick]');let int=setInterval(()=>{boxes[seq[i]].style.opacity=0.3;setTimeout(()=>boxes[seq[i]].style.opacity=1,400);i++;if(i>=seq.length)clearInterval(int);},700);}
+function clickColor(i){userSeq.push(i);if(userSeq[userSeq.length-1]!==seq[userSeq.length-1]){alert("Umekosea! Umepata "+level*3+" VIJI");updateCoins(level*3);document.getElementById('coins3').innerText=parseInt(document.getElementById('coins3').innerText)+level*3;return;}if(userSeq.length==seq.length){updateCoins(5);document.getElementById('coins3').innerText=parseInt(document.getElementById('coins3').innerText)+5;setTimeout(nextLevel,1000);}}
 
-// GAME 3: MATH
-function newMath(){let a=Math.floor(Math.random()*10)+1; let b=Math.floor(Math.random()*10)+1; window.ans=a+b; document.getElementById('mathQ').innerText=`${a} + ${b} = ?`;}
-function checkMath(){if(parseInt(document.getElementById('inputMath').value)==window.ans){score3=parseInt(document.getElementById('score3').innerText)+1; document.getElementById('score3').innerText=score3; totalCoins=parseInt(totalCoins)+1; localStorage.setItem('vijiCoins',totalCoins); alert('+1 VIJI COIN!');} newMath();}
+// 4. TENGENEZA NENO
+const words=[{letters:"S K U L E",ans:"SHULE"},{letters:"P E S A",ans:"PESA"},{letters:"A K I L I",ans:"AKILI"}];
+function newWord(){let w=words[Math.floor(Math.random()*words.length)];document.getElementById('wordLetters').innerText=w.letters;window.wordAns=w.ans;}
+function checkWord(){if(document.getElementById('wordInput').value.toUpperCase()==window.wordAns){updateCoins(8);document.getElementById('coins4').innerText=parseInt(document.getElementById('coins4').innerText)+8;let s=parseInt(document.getElementById('score4').innerText)+1;document.getElementById('score4').innerText=s;alert("Sahihi! +8 VIJI COINS");newWord();}else{alert("Jaribu tena")}}
 
+// 5. HESABU NGUMU
+function newMath(){let a=Math.floor(Math.random()*15)+5;let b=Math.floor(Math.random()*10)+2;window.mathAns=a*b;document.getElementById('mathQ').innerText=`${a} x ${b} =?`}
+function checkMath(){if(parseInt(document.getElementById('mathInput').value)==window.mathAns){updateCoins(7);document.getElementById('coins5').innerText=parseInt(document.getElementById('coins5').innerText)+7;let s=parseInt(document.getElementById('score5').innerText)+1;document.getElementById('score5').innerText=s;alert("+7 VIJI COINS");newMath();}else{alert("Kosea! Jaribu tena")}}
+
+function checkAns(correct,game,coins){if(correct){let s=parseInt(document.getElementById('score'+game).innerText)+1;document.getElementById('score'+game).innerText=s;updateCoins(coins);document.getElementById('coins'+game).innerText=parseInt(document.getElementById('coins'+game).innerText)+coins;alert("Sahihi! +"+coins+" VIJI");if(game==1)newPattern();if(game==2)newLogic();}else{alert("Kosea!")}}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 </script>
 </body>
-</html>
+                                                                                                                                                                              </html>
