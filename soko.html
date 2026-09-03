@@ -6,116 +6,121 @@
 <style>
 body{background:#0f172a;color:white;padding:20px;font-family:Arial}
 h2{text-align:center;color:#3b82f6}
-.card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0}
+.card{background:#1e293b;padding:15px;border-radius:12px;margin:15px 0;position:relative}
 .card h3{color:#f59e0b;margin:5px 0}
 .card img{width:100%;border-radius:10px;margin-bottom:10px;height:200px;object-fit:cover}
 .whatsapp-btn{background:#25D366;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold}
 .add-btn{background:#10b981;color:white;padding:15px;text-align:center;border-radius:12px;display:block;margin:20px 0;font-weight:bold;border:none;width:100%;font-size:16px;cursor:pointer}
 .form-box{background:#1e293b;padding:20px;border-radius:12px;margin:20px 0;display:none}
-input, textarea{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:white}
+input{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:white}
+.btn-delete{position:absolute;top:10px;right:10px;background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer}
+.wallet{background:#1e293b;padding:15px;border-radius:12px;text-align:center;margin-bottom:20px;color:#f59e0b}
 </style>
 </head>
 <body>
 
 <h2>🛒 VIJI SOKONI</h2>
-<p style="text-align:center">Nunua/Uza vitu vyako hapa</p>
+
+<div class="wallet">
+  Wallet yako: <b><span id="wallet">0</span> TZS</b>
+  <p style="font-size:12px;color:#94a3b8">Ongeza 5% ya bei ya bidhaa ili uweze kuongeza</p>
+</div>
 
 <button class="add-btn" onclick="onyeshaFomu()">+ ONGEZA BIDHAA MPYA</button>
 
-<!-- FOMU YA KUONGEZA BIDHAA -->
 <div class="form-box" id="fomuBidhaa">
   <h3>Ongeza Bidhaa Yako</h3>
   <input type="text" id="jina" placeholder="Jina la Bidhaa">
-  <input type="number" id="bei" placeholder="Bei TZS">
+  <input type="number" id="bei" placeholder="Bei TZS" oninput="hesabuTano()">
   <input type="text" id="mkoa" placeholder="Mkoa">
+  <p style="color:#f59e0b">Unahitaji kulipa: <span id="tano">0</span> TZS</p>
   <input type="file" id="picha" accept="image/*">
-  <button class="add-btn" style="background:#3b82f6" onclick="hifadhiBidhaa()">HIFADHI BIDHAA</button>
+  <button class="add-btn" style="background:#3b82f6" onclick="hifadhiBidhaa()">LIPA 5% + HIFADHI</button>
   <button class="add-btn" style="background:#64748b" onclick="fichaFomu()">FUNGA</button>
 </div>
 
-<!-- HAPA NDIO BIDHAA ZITAONEKANA -->
 <div id="orodhaBidhaa"></div>
 
 <a href="index.html" style="color:#94a3b8">← Rudi Nyuma</a>
 
 <script>
-let nambaYangu = "255 653 243 898"; // 
+let nambaYangu = "255 653 243 898"; // BADILI NA NAMBA YAKO YA WHATSAPP
+let userID = localStorage.getItem('vijiUserID') || Date.now();
+localStorage.setItem('vijiUserID', userID);
+let wallet = parseInt(localStorage.getItem('vijiWallet')) || 0;
+document.getElementById('wallet').innerText = wallet.toLocaleString();
 
-// ONYESHA/FICHA FOMU
 function onyeshaFomu(){document.getElementById('fomuBidhaa').style.display='block';}
 function fichaFomu(){document.getElementById('fomuBidhaa').style.display='none';}
+function hesabuTano(){let bei = document.getElementById('bei').value || 0; document.getElementById('tano').innerText = (bei * 0.05).toLocaleString();}
 
-// PAKIA BIDHAA ZILIZOHIFADHIWA
 function pakiaBidhaa(){
   let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
   let div = document.getElementById('orodhaBidhaa');
   div.innerHTML = '';
-  
-  if(bidhaa.length == 0){
-    div.innerHTML = '<p style="text-align:center;color:#94a3b8">Hakuna bidhaa bado. Bonyeza ONGEZA BIDHAA</p>';
-  }
-  
+  if(bidhaa.length == 0){div.innerHTML = '<p style="text-align:center;color:#94a3b8">Hakuna bidhaa bado</p>';}
+
   bidhaa.forEach(b => {
+    let btnFuta = (b.mwenyeBidhaa == userID)? `<button class="btn-delete" onclick="futaBidhaa(${b.id})">X</button>` : '';
     div.innerHTML += `
-    <div class="card">
+    <div class="card" id="bidhaa-${b.id}">
+      ${btnFuta}
       <img src="${b.picha}" alt="${b.jina}">
       <h3>${b.jina}</h3>
       <p>Bei: ${parseInt(b.bei).toLocaleString()} TZS</p>
-      <p>${b.mkoa}</p>
+      <p>${b.mkoa || 'Haijatajwa'}</p>
       <a href="https://wa.me/${nambaYangu}?text=Habari%20nahusika%20na%20${b.jina}" class="whatsapp-btn" onclick="hifadhiMauzo('${b.jina}', '${b.bei}')">Wasiliana WhatsApp</a>
     </div>
     `;
   });
 }
 
-// HIFADHI BIDHAA MPYA
 function hifadhiBidhaa(){
   let jina = document.getElementById('jina').value;
-  let bei = document.getElementById('bei').value;
+  let bei = parseInt(document.getElementById('bei').value);
   let mkoa = document.getElementById('mkoa').value;
   let pichaFile = document.getElementById('picha').files[0];
-  
+  let tano = bei * 0.05;
+
   if(!jina ||!bei ||!mkoa ||!pichaFile){alert('Tafadhali jaza yote'); return;}
-  
+  if(wallet < tano){alert('Wallet yako haina pesa za kutosha kulipa 5%'); return;}
+
+  wallet = wallet - tano;
+  localStorage.setItem('vijiWallet', wallet);
+  document.getElementById('wallet').innerText = wallet.toLocaleString();
+
   let reader = new FileReader();
   reader.onload = function(e){
     let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
-    let bidhaaMpya = {
-      id: Date.now(),
-      jina: jina,
-      bei: bei,
-      mkoa: mkoa,
-      picha: e.target.result // Hii ndio inahifadhi picha kwenye localStorage
-    };
+    let bidhaaMpya = {id: Date.now(), jina: jina, bei: bei, mkoa: mkoa, picha: e.target.result, mwenyeBidhaa: userID};
     bidhaa.push(bidhaaMpya);
     localStorage.setItem('vijiBidhaa', JSON.stringify(bidhaa));
-    
     alert('✅ Bidhaa imeongezwa!');
-    document.getElementById('jina').value='';
-    document.getElementById('bei').value='';
-    document.getElementById('mkoa').value='';
-    document.getElementById('picha').value='';
-    fichaFomu();
-    pakiaBidhaa();
+    document.getElementById('jina').value=''; document.getElementById('bei').value=''; document.getElementById('mkoa').value=''; document.getElementById('picha').value='';
+    fichaFomu(); pakiaBidhaa();
   }
   reader.readAsDataURL(pichaFile);
 }
 
-// HIFADHI MAUZO KWENDA ADMIN
-function hifadhiMauzo(bidhaa, bei){
-  let mauzo = JSON.parse(localStorage.getItem('vijiMauzo')) || [];
-  let mauzoMpya = {
-    id: Date.now(),
-    bidhaa: bidhaa,
-    bei: bei,
-    tarehe: new Date().toLocaleString('sw-TZ'),
-    status: 'Inasubiri'
-  };
-  mauzo.push(mauzoMpya);
-  localStorage.setItem('vijiMauzo', JSON.stringify(mauzo));
+function futaBidhaa(id){
+  if(confirm('Una uhakika unataka kufuta bidhaa yako hii?')){
+    let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
+    bidhaa = bidhaa.filter(b => b.id!= id);
+    localStorage.setItem('vijiBidhaa', JSON.stringify(bidhaa));
+    pakiaBidhaa();
+  }
 }
 
-// PAKIA UKURASA UNAPOFUNGUKA
+function hifadhiMauzo(bidhaa, bei){
+  let faida = bei * 0.95;
+  wallet = wallet + faida;
+  localStorage.setItem('vijiWallet', wallet);
+  document.getElementById('wallet').innerText = wallet.toLocaleString();
+  let mauzo = JSON.parse(localStorage.getItem('vijiMauzo')) || [];
+  mauzo.push({id: Date.now(), bidhaa: bidhaa, bei: bei, tarehe: new Date().toLocaleString('sw-TZ'), status: 'Imekamilika'});
+  localStorage.setItem('vijiMauzo', JSON.stringify(mauzo));
+  alert('✅ Umeuza! 95% = '+faida.toLocaleString()+' TZS imeongezwa kwenye wallet');
+}
 pakiaBidhaa();
 </script>
 </body>
