@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIJI PAY</title>
+<style>
+body{background:#0f172a;color:white;padding:20px;font-family:Arial;text-align:center}
+h2{color:#f59e0b}
+.box{background:#1e293b;padding:25px;border-radius:15px;margin:20px 0}
+.pay-card{background:#0f172a;padding:20px;border-radius:12px;margin:15px 0;border:2px solid #334155}
+.pay-card h3{margin:0;color:#f59e0b}
+.pay-card p{font-size:22px;font-weight:bold;margin:10px 0;color:white}
+.copy-btn{background:#3b82f6;padding:10px 20px;border:none;border-radius:8px;color:white;font-weight:bold;cursor:pointer;margin-top:10px}
+.copy-btn:active{background:#2563eb}
+.note{background:#1e3a8a;padding:15px;border-radius:10px;color:#60a5fa;font-size:14px}
+.back{margin-top:20px;display:inline-block;color:#94a3b8;text-decoration:none}
+</style>
+</head>
+<body>
+
+<h2>💰 VIJI PAY</h2>
+<p>Chagua njia ya kulipia</p>
+
+<div class="box">
+  <div class="pay-card">
+    <h3>M-PESA</h3>
+    <p id="mpesa">WEKA NAMBA YA M-PESA</p>
+    <p style="font-size:14px;color:#94a3b8">Jina: WEKA JINA LAKO</p>
+    <button class="copy-btn" onclick="copy('mpesa')">Nakili Namba</button>
+  </div>
+
+  <div class="pay-card">
+    <h3>TIGO PESA</h3>
+    <p id="tigo">WEKA NAMBA YA TIGO</p>
+    <p style="font-size:14px;color:#94a3b8">Jina: WEKA JINA LAKO</p>
+    <button class="copy-btn" onclick="copy('tigo')">Nakili Namba</button>
+  </div>
+
+  <div class="pay-card">
+    <h3>AIRTEL MONEY</h3>
+    <p id="airtel">WEKA NAMBA YA AIRTEL</p>
+    <p style="font-size:14px;color:#94a3b8">Jina: WEKA JINA LAKO</p>
+    <button class="copy-btn" onclick="copy('airtel')">Nakili Namba</button>
+  </div>
+
+  <div class="pay-card">
+    <h3>HALOTEL MONEY</h3>
+    <p id="halotel">WEKA NAMBA YA HALOTEL</p>
+    <p style="font-size:14px;color:#94a3b8">Jina: WEKA JINA LAKO</p>
+    <button class="copy-btn" onclick="copy('halotel')">Nakili Namba</button>
+  </div>
+
+  <div class="note">
+    <b>MUHIMU:</b> Baada ya kulipa tuma Screenshot kwa muuzaji kwenye WhatsApp kama ushahidi
+  </div>
+</div>
+
+<a href="index.html" class="back">← Rudi Nyuma</a>
+
+<script>
+function copy(id){
+  let text = document.getElementById(id).innerText.replace(/\s/g,'');
+  navigator.clipboard.writeText(text);
+  alert('✅ Namba imenakiliwa: '+text);
+}
+</script>
+
+</body>
+</html>
