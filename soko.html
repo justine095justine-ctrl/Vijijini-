@@ -10,6 +10,9 @@ h2{text-align:center;color:#3b82f6}
 .card h3{color:#f59e0b;margin:5px 0}
 .card img{width:100%;border-radius:10px;margin-bottom:10px;height:200px;object-fit:cover}
 .whatsapp-btn{background:#25D366;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold}
+.add-btn{background:#10b981;color:white;padding:15px;text-align:center;border-radius:12px;display:block;margin:20px 0;font-weight:bold;border:none;width:100%;font-size:16px;cursor:pointer}
+.form-box{background:#1e293b;padding:20px;border-radius:12px;margin:20px 0;display:none}
+input, textarea{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:white}
 </style>
 </head>
 <body>
@@ -17,35 +20,88 @@ h2{text-align:center;color:#3b82f6}
 <h2>🛒 VIJI SOKONI</h2>
 <p style="text-align:center">Nunua/Uza vitu vyako hapa</p>
 
-<!-- BIDHAA 1 -->
-<div class="card">
-  <img src="viatu.jpg" alt="Viatu Nike">
-  <h3>Viatu Nike Size 42</h3>
-  <p>Bei: 50,000 TZS</p>
-  <p>Mwanza</p>
-  <a href="https://wa.me/255 653 243 898?text=Habari%20nahusika%20na%20Viatu%20Nike%20Size%2042" class="whatsapp-btn" onclick="hifadhiMauzo('Viatu Nike', '50000')">Wasiliana WhatsApp</a>
+<button class="add-btn" onclick="onyeshaFomu()">+ ONGEZA BIDHAA MPYA</button>
+
+<!-- FOMU YA KUONGEZA BIDHAA -->
+<div class="form-box" id="fomuBidhaa">
+  <h3>Ongeza Bidhaa Yako</h3>
+  <input type="text" id="jina" placeholder="Jina la Bidhaa">
+  <input type="number" id="bei" placeholder="Bei TZS">
+  <input type="text" id="mkoa" placeholder="Mkoa">
+  <input type="file" id="picha" accept="image/*">
+  <button class="add-btn" style="background:#3b82f6" onclick="hifadhiBidhaa()">HIFADHI BIDHAA</button>
+  <button class="add-btn" style="background:#64748b" onclick="fichaFomu()">FUNGA</button>
 </div>
 
-<!-- BIDHAA 2 -->
-<div class="card">
-  <img src="simu.jpg" alt="Simu Samsung">
-  <h3>Simu Samsung A12</h3>
-  <p>Bei: 180,000 TZS</p>
-  <p>DSM</p>
-  <a href="https://wa.me/255 653 243 898?text=Habari%20nahusika%20na%20Samsung%20A12" class="whatsapp-btn" onclick="hifadhiMauzo('Samsung A12', '180000')">Wasiliana WhatsApp</a>
-</div>
-
-<!-- =<div class="card">
-  <img src="jina-la-picha.jpg" alt="Jina la bidhaa">
-  <h3>Jina la Bidhaa</h3>
-  <p>Bei: 00,000 TZS</p>
-  <p>Mkoa</p>
-  <a href="https://wa.me/255 653 243 898?text=Habari%20nahusika%20na%20Jina%20la%20Bidhaa" class="whatsapp-btn" onclick="hifadhiMauzo('Jina la Bidhaa', '00000')">Wasiliana WhatsApp</a>
-</div>===== BONGEZA BIDHAA MPYA HAPA CHINI ====== -->
+<!-- HAPA NDIO BIDHAA ZITAONEKANA -->
+<div id="orodhaBidhaa"></div>
 
 <a href="index.html" style="color:#94a3b8">← Rudi Nyuma</a>
 
 <script>
+let nambaYangu = "255 653 243 898"; // 
+
+// ONYESHA/FICHA FOMU
+function onyeshaFomu(){document.getElementById('fomuBidhaa').style.display='block';}
+function fichaFomu(){document.getElementById('fomuBidhaa').style.display='none';}
+
+// PAKIA BIDHAA ZILIZOHIFADHIWA
+function pakiaBidhaa(){
+  let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
+  let div = document.getElementById('orodhaBidhaa');
+  div.innerHTML = '';
+  
+  if(bidhaa.length == 0){
+    div.innerHTML = '<p style="text-align:center;color:#94a3b8">Hakuna bidhaa bado. Bonyeza ONGEZA BIDHAA</p>';
+  }
+  
+  bidhaa.forEach(b => {
+    div.innerHTML += `
+    <div class="card">
+      <img src="${b.picha}" alt="${b.jina}">
+      <h3>${b.jina}</h3>
+      <p>Bei: ${parseInt(b.bei).toLocaleString()} TZS</p>
+      <p>${b.mkoa}</p>
+      <a href="https://wa.me/${nambaYangu}?text=Habari%20nahusika%20na%20${b.jina}" class="whatsapp-btn" onclick="hifadhiMauzo('${b.jina}', '${b.bei}')">Wasiliana WhatsApp</a>
+    </div>
+    `;
+  });
+}
+
+// HIFADHI BIDHAA MPYA
+function hifadhiBidhaa(){
+  let jina = document.getElementById('jina').value;
+  let bei = document.getElementById('bei').value;
+  let mkoa = document.getElementById('mkoa').value;
+  let pichaFile = document.getElementById('picha').files[0];
+  
+  if(!jina ||!bei ||!mkoa ||!pichaFile){alert('Tafadhali jaza yote'); return;}
+  
+  let reader = new FileReader();
+  reader.onload = function(e){
+    let bidhaa = JSON.parse(localStorage.getItem('vijiBidhaa')) || [];
+    let bidhaaMpya = {
+      id: Date.now(),
+      jina: jina,
+      bei: bei,
+      mkoa: mkoa,
+      picha: e.target.result // Hii ndio inahifadhi picha kwenye localStorage
+    };
+    bidhaa.push(bidhaaMpya);
+    localStorage.setItem('vijiBidhaa', JSON.stringify(bidhaa));
+    
+    alert('✅ Bidhaa imeongezwa!');
+    document.getElementById('jina').value='';
+    document.getElementById('bei').value='';
+    document.getElementById('mkoa').value='';
+    document.getElementById('picha').value='';
+    fichaFomu();
+    pakiaBidhaa();
+  }
+  reader.readAsDataURL(pichaFile);
+}
+
+// HIFADHI MAUZO KWENDA ADMIN
 function hifadhiMauzo(bidhaa, bei){
   let mauzo = JSON.parse(localStorage.getItem('vijiMauzo')) || [];
   let mauzoMpya = {
@@ -58,6 +114,9 @@ function hifadhiMauzo(bidhaa, bei){
   mauzo.push(mauzoMpya);
   localStorage.setItem('vijiMauzo', JSON.stringify(mauzo));
 }
+
+// PAKIA UKURASA UNAPOFUNGUKA
+pakiaBidhaa();
 </script>
 </body>
 </html>
