@@ -14,7 +14,7 @@ h2{text-align:center;color:#f59e0b}
 .card.expiry{color:#f59e0b;font-size:12px}
 .card.expiry.expired{color:#ef4444}
 .card img{width:100%;border-radius:10px;margin-bottom:10px;height:180px;object-fit:cover}
-.call-btn{background:#10b981;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold}
+.call-btn{background:#10b981;color:white;padding:12px;text-align:center;border-radius:8px;text-decoration:none;display:block;margin-top:10px;font-weight:bold;border:none;width:100%;cursor:pointer}
 .call-btn.disabled{background:#64748b;cursor:not-allowed}
 .add-btn{background:#f59e0b;color:white;padding:15px;text-align:center;border-radius:12px;display:block;margin:10px 0;font-weight:bold;border:none;width:100%;font-size:16px;cursor:pointer}
 .badge{background:#10b981;color:#0f172a;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:bold}
@@ -22,6 +22,9 @@ h2{text-align:center;color:#f59e0b}
 input{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:white}
 .score{color:#ec4899;font-weight:bold;font-size:18px;text-align:center}
 .btn-delete{position:absolute;top:10px;right:10px;background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer}
+.notice{background:#334155;padding:10px;border-radius:8px;font-size:12px;margin-top:10px;color:#f59e0b}
+.popup{background:#1e293b;padding:20px;border-radius:12px;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;display:none;width:90%;max-width:400px}
+.overlay{background:rgba(0,0,0,0.7);position:fixed;top:0;left:0;width:100%;height:100%;z-index:998;display:none}
 </style>
 </head>
 <body>
@@ -49,6 +52,20 @@ input{width:93%;padding:12px;margin:8px 0;border-radius:8px;border:none;backgrou
 
 <div id="orodhaSkills"></div>
 
+<div class="overlay" id="overlay" onclick="fungaPopup()"></div>
+<div class="popup" id="popupLipa">
+  <h3 style="color:#f59e0b;text-align:center">Lipa 500 TZS Kwanza</h3>
+  <p>1. Tuma 500 TZS kwa: <b style="color:#10b981">0653243898</b></p>
+  <p>2. Jina: <b>VIJI SKILLS</b></p>
+  <p>3. Kisha utapata PIN hapa chini</p>
+  <button class="add-btn" style="background:#10b981" onclick="toaPIN()">NIMELIPA - NIPAWE PIN</button>
+  <button class="add-btn" style="background:#64748b" onclick="fungaPopup()">GHUSHA</button>
+</div>
+
+<div class="notice">
+  **Jinsi inavyofanya kazi:** Mteja akitaka kuwasiliana atatakiwa kulipa 500 TZS kwanza.
+</div>
+
 <a href="index.html" style="color:#94a3b8">← Rudi Nyuma</a>
 
 <script>
@@ -56,11 +73,13 @@ let userID = localStorage.getItem('vijiUserID') || Date.now();
 localStorage.setItem('vijiUserID', userID);
 let wallet = parseInt(localStorage.getItem('vijiWallet')) || 0;
 let alama = parseInt(localStorage.getItem('vijiAlama')) || 0;
+let skillYaSasa = null; // Tunahifadhi fundi gani amebonyezwa
 document.getElementById('wallet').innerText = wallet.toLocaleString();
 document.getElementById('alama').innerText = alama;
 
 function onyeshaFomu(){document.getElementById('fomuSkill').style.display='block';}
 function fichaFomu(){document.getElementById('fomuSkill').style.display='none';}
+function fungaPopup(){document.getElementById('overlay').style.display='none';document.getElementById('popupLipa').style.display='none';}
 
 function ongezaAlama(pt){
   alama += pt;
@@ -68,10 +87,9 @@ function ongezaAlama(pt){
   document.getElementById('alama').innerText = alama;
 }
 
-// FIX: KAMA HAKUNA EXPIRY TUMPA SIKU 30
 function sikuZilizobaki(s){
-  if(!s.expiry){ 
-    s.expiry = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // mpa siku 30
+  if(!s.expiry){
+    s.expiry = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
     let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
     let index = skills.findIndex(x => x.id == s.id);
     if(index!= -1) skills[index].expiry = s.expiry;
@@ -94,15 +112,123 @@ function pakiaSkills(){
   }
 
   skills.forEach(s => {
-    // FIX: KAMA HAKUNA KAZI NA MKOA TUANDIKE "HAJAWEKWA"
     let kazi = s.ufundi || "Hajawekwa";
     let mkoa = s.mkoa || "Hajawekwa";
-    
     let siku = sikuZilizobaki(s);
     let active = siku > 0;
     let btnClass = active? 'call-btn' : 'call-btn disabled';
-    let btnText = active? 'WASILIANA - Mteja alipa 500' : `IMEKWISHA - Siku 0`;
+    let btnText = active? 'WASILIANA NA FUNDI - 500 TZS' : `IMEKWISHA - Siku 0`;
     let expiryClass = active? 'expiry' : 'expiry expired';
     let btnFuta = (s.mwenyeSkill == userID)? `<button class="btn-delete" onclick="futaSkill(${s.id})">X</button>` : '';
 
     div.innerHTML += `
+    <div class="card">
+      ${btnFuta}
+      <img src="${s.picha}" alt="${s.jina}">
+      <h3>${s.jina}</h3>
+      <p><b>Kazi:</b> ${kazi}</p>
+      <p><b>Mkoa:</b> ${mkoa}</p>
+      <p class="${expiryClass}">Inaisha baada ya: ${siku} siku</p>
+      <button class="${btnClass}" onclick="${active? 'funguaLipa('+s.id+')' : ''}">${btnText}</button>
+    </div>
+    `;
+  });
+}
+
+// HATUA 1: FUNGUWA POPUP YA KULIPA
+function funguaLipa(skillID){
+  skillYaSasa = skillID;
+  document.getElementById('overlay').style.display='block';
+  document.getElementById('popupLipa').style.display='block';
+}
+
+// HATUA 2: TENGENEZA PIN MPYA YA KIPEKEE
+function toaPIN(){
+  let pinMpya = Math.floor(1000 + Math.random() * 9000); // PIN ya namba 4
+  let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
+  let skill = skills.find(s => s.id == skillYaSasa);
+
+  // Hifadhi PIN na uihusishe na fundi huyu
+  if(!skill.pins) skill.pins = [];
+  skill.pins.push({pin: pinMpya, imetumika: false});
+  localStorage.setItem('vijiSkills', JSON.stringify(skills));
+
+  let pinInput = prompt(`✅ Asante kwa kulipa!\n\nPIN yako ya kipekee ni: ${pinMpya}\n\nIngiza PIN hapa ili ufunguliwe namba ya ${skill.jina}`);
+
+  if(pinInput == pinMpya){
+    // Angalia kama PIN imetumika
+    let pinObj = skill.pins.find(p => p.pin == pinMpya);
+    if(pinObj.imatika){
+      alert("❌ PIN hii imeshatumika. Lipa tena 500");
+      return;
+    }
+
+    pinObj.imatika = true; // IWEKE IMEITUMIKA
+    localStorage.setItem('vijiSkills', JSON.stringify(skills));
+
+    // Kata 500 ya fundi
+    if(wallet >= 500){
+      wallet = wallet - 500;
+      localStorage.setItem('vijiWallet', wallet);
+      document.getElementById('wallet').innerText = wallet.toLocaleString();
+    }
+
+    window.open('https://wa.me/' + skill.namba, '_blank');
+    ongezaAlama(2);
+    alert(`✅ Umefanikiwa! Umefunguliwa kuwasiliana na ${skill.jina}`);
+    fungaPopup();
+  } else if(pinInput!= null){
+    alert("❌ PIN sio sahihi");
+  }
+}
+
+// HIFADHI FUNDI MPYA - KATA 2000
+function hifadhiSkill(){
+  let jina = document.getElementById('jina').value;
+  let ufundi = document.getElementById('ufundi').value;
+  let mkoa = document.getElementById('mkoa').value;
+  let namba = document.getElementById('namba').value;
+  let pichaFile = document.getElementById('picha').files[0];
+  let ada = 2000;
+
+  if(!jina ||!ufundi ||!mkoa ||!namba ||!pichaFile){alert('Tafadhali jaza yote'); return;}
+  if(wallet < ada){alert('Wallet yako haina 2000 TZS. Weka pesa kwanza'); return;}
+
+  wallet = wallet - ada;
+  localStorage.setItem('vijiWallet', wallet);
+  document.getElementById('wallet').innerText = wallet.toLocaleString();
+
+  let reader = new FileReader();
+  reader.onload = function(e){
+    let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
+    let mwezi1 = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+    let skillMpya = {
+      id: Date.now(), jina: jina, ufundi: ufundi, mkoa: mkoa, namba: namba,
+      picha: e.target.result, mwenyeSkill: userID, expiry: mwezi1, pins: []
+    };
+    skills.push(skillMpya);
+    localStorage.setItem('vijiSkills', JSON.stringify(skills));
+
+    ongezaAlama(10);
+    alert('✅ Umejiunga kwa mwezi 1! 2000 TZS imetoka. +10 alama');
+    document.getElementById('jina').value=''; document.getElementById('ufundi').value='';
+    document.getElementById('mkoa').value=''; document.getElementById('namba').value=''; document.getElementById('picha').value='';
+    fichaFomu(); pakiaSkills();
+  }
+  reader.readAsDataURL(pichaFile);
+}
+
+// FUTA SKILL
+function futaSkill(id){
+  if(confirm('Una uhakika? Subscription haijarejeshwa.')){
+    let skills = JSON.parse(localStorage.getItem('vijiSkills')) || [];
+    skills = skills.filter(s => s.id!= id);
+    localStorage.setItem('vijiSkills', JSON.stringify(skills));
+    pakiaSkills();
+  }
+}
+
+pakiaSkills();
+</script>
+</body>
+</html>
