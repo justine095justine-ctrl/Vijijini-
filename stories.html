@@ -3,121 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIJI PAY PRO</title>
-<link rel="manifest" href="manifest.json">
+<title>VIJI STORIES & MAKALA</title>
 <meta name="theme-color" content="#7c3aed">
 <style>
 body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);color:#fff;text-align:center;padding:15px;margin:0;min-height:100vh;}
-h1{color:#c084fc;font-size:24px;margin:10px 0;text-shadow:0 0 10px #a855f7;}
+h1{color:#c084fc;font-size:22px;margin:10px 0;}
 .card{background:rgba(30,41,59,0.9);backdrop-filter:blur(10px);padding:20px;border-radius:20px;max-width:450px;margin:15px auto;display:none;border:1px solid #334155;}
 .btn{width:100%;padding:14px;margin:8px 0;border:none;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;}
 .btn-purple{background:linear-gradient(90deg,#8b5cf6,#a855f7);color:#fff;}
 .btn-pink{background:linear-gradient(90deg,#ec4899,#db2777);color:#fff;}
 .btn-orange{background:linear-gradient(90deg,#f97316,#ea580c);color:#fff;}
-.big{font-size:22px;font-weight:bold;color:#fbbf24;margin:10px 0;}
-.story-box,.makala-box{background:#1e293b;padding:15px;border-radius:15px;text-align:left;margin:10px 0;border-left:4px solid #a855f7;cursor:pointer;}
-.makala-box{border-left:4px solid #f97316;}
+.btn-yellow{background:linear-gradient(90deg,#fbbf24,#f59e0b);color:#000;}
+.btn-green{background:linear-gradient(90deg,#22c55e,#16a34a);color:#fff;}
+.big{font-size:20px;font-weight:bold;color:#fbbf24;margin:10px 0;}
+.content-box{background:#1e293b;padding:15px;border-radius:15px;text-align:left;margin:10px 0;cursor:pointer;border-left:4px solid #8b5cf6;}
+.stat-box{background:#1e293b;padding:15px;border-radius:12px;margin:10px 0;text-align:left;border-left:4px solid #fbbf24;}
+input,textarea,select{width:90%;padding:12px;margin:8px 0;border-radius:10px;border:2px solid #475569;background:#1e293b;color:#fff;font-size:15px;}
+.note{font-size:12px;color:#94a3b8;margin-top:5px;}
 </style>
 </head>
 <body>
 
-<h1>💰 VIJI PAY PRO</h1>
-<p>Wallet + Maarifa + Burudani</p>
+<h1>📚 VIJI STORIES & 📰 VIJI MAKALA</h1>
+<div class="big">Salio: Tsh <span id="salio">5000</span></div>
 
+<!-- 1. MENU KUU -->
 <div id="menu" class="card" style="display:block;">
-  <h2>Salio: Tsh <span id="salio">5000</span></h2>
-  <button class="btn btn-purple" onclick="tumaPesa()">TUMA PESA</button>
-  <button class="btn btn-purple" onclick="lipia()">LIPIA BILI</button>
   <button class="btn btn-pink" onclick="funguaStories()">📚 VIJI STORIES</button>
   <button class="btn btn-orange" onclick="funguaMakala()">📰 VIJI MAKALA</button>
+  <button class="btn btn-purple" onclick="funguaDashboard()">📊 DASHBOARD YANGU</button>
+  <button class="btn btn-purple" onclick="rudiApp()">⬅️ RUDI APP KUU</button>
 </div>
 
-<!-- VIJI STORIES -->
+<!-- 2. STORIES -->
 <div id="stories" class="card">
   <h2>📚 VIJI STORIES</h2>
-  <p>Soma hadithi za aina zote - Tsh 100/Stori</p>
-  <button class="btn btn-pink" onclick="chaguaAina('kweli')">1. ZA KWELI 📖</button>
-  <button class="btn btn-pink" onclick="chaguaAina('kubuni')">2. ZA KUBUNI ✨</button>
-  <button class="btn btn-pink" onclick="chaguaAina('vicheko')">3. ZA VICHEKO 😂</button>
-  <button class="btn btn-pink" onclick="chaguaAina('kutisha')">4. ZA KUTISHA 👻</button>
-  <button class="btn" style="background:#334155;" onclick="ongezaContent('story')">➕ TUMA STORI YAKO</button>
-  <button class="btn btn-purple" onclick="lipiaStories()">💳 LIPIA MWEZI MZIMA Tsh 1000</button>
-  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
+  <p><b>Kusoma: Tsh 100</b> | <b>VIP Mwezi: Tsh 2000</b></p>
+  <button class="btn btn-pink" onclick="chaguaAina('kweli')">ZA KWELI 📖</button>
+  <button class="btn btn-pink" onclick="chaguaAina('kubuni')">ZA KUBUNI ✨</button>
+  <button class="btn btn-pink" onclick="chaguaAina('vicheko')">ZA VICHEKO 😂</button>
+  <button class="btn btn-pink" onclick="chaguaAina('kutisha')">ZA KUTISHA 👻</button>
+  <button class="btn btn-yellow" onclick="funguaFomu('story')">➕ WEKA STORI YAKO Tsh 500</button>
+  <button class="btn btn-purple" onclick="lipiaMwezi()">💳 VIP MWEZI Tsh 2000</button>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI</button>
 </div>
 
-<!-- VIJI MAKALA -->
+<!-- 3. MAKALA -->
 <div id="makala" class="card">
   <h2>📰 VIJI MAKALA</h2>
-  <p>Soma makala za kielimu - Tsh 200/Makala</p>
-  <button class="btn btn-orange" onclick="chaguaMakala('biashara')">1. BIASHARA 💼</button>
-  <button class="btn btn-orange" onclick="chaguaMakala('afya')">2. AFYA NA LISHE 🥗</button>
-  <button class="btn btn-orange" onclick="chaguaMakala('teknolojia')">3. TEKNOLOJIA 📱</button>
-  <button class="btn btn-orange" onclick="chaguaMakala('maisha')">4. MAISHA NA UJUZI 🧠</button>
-  <button class="btn" style="background:#334155;" onclick="ongezaContent('makala')">➕ TUMA MAKALA YAKO</button>
-  <button class="btn btn-purple" onclick="lipiaMakala()">💳 LIPIA MWEZI MZIMA Tsh 2000</button>
-  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
+  <p><b>Kusoma: Tsh 200</b> | <b>VIP Mwezi: Tsh 2000</b></p>
+  <button class="btn btn-orange" onclick="chaguaMakala('biashara')">BIASHARA 💼</button>
+  <button class="btn btn-orange" onclick="chaguaMakala('afya')">AFYA 🥗</button>
+  <button class="btn btn-orange" onclick="chaguaMakala('teknolojia')">TEKNOLOJIA 📱</button>
+  <button class="btn btn-orange" onclick="chaguaMakala('maisha')">MAISHA 🧠</button>
+  <button class="btn btn-yellow" onclick="funguaFomu('makala')">➕ WEKA MAKALA YAKO Tsh 1000</button>
+  <button class="btn btn-purple" onclick="lipiaMwezi()">💳 VIP MWEZI Tsh 2000</button>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI</button>
 </div>
 
 <!-- ORODHA -->
 <div id="contentList" class="card">
   <h2 id="listTitle"></h2>
   <div id="orodhaContent"></div>
-  <button class="btn" style="background:#475569;" onclick="rudiNyumaList()">RUDI NYUMA</button>
+  <button class="btn" style="background:#475569;" onclick="rudiNyuma()">RUDI NYUMA</button>
 </div>
 
 <!-- KUSOMA -->
 <div id="somaContent" class="card">
   <h2 id="contentTitle"></h2>
-  <div class="story-box" id="contentBody"></div>
-  <button class="btn btn-purple" id="nunuaBtn" onclick="nunuaContent()">💳 NUNUA KUSOMA</button>
+  <div class="content-box" id="contentBody"></div>
+  <button class="btn btn-green" id="nunuaBtn" onclick="nunuaKusoma()">💳 NUNUA KUSOMA</button>
   <button class="btn" style="background:#475569;" onclick="contentList.style.display='block';somaContent.style.display='none'">RUDI</button>
+</div>
+
+<!-- FOMU YA KUWEKA -->
+<div id="fomuWeka" class="card">
+  <h2 id="fomuTitle"></h2>
+  <input type="text" id="titleInput" placeholder="Weka Kichwa cha Habari">
+  <textarea id="bodyInput" rows="6" placeholder="Andika maudhui yako kamili hapa..."></textarea>
+  <select id="categoryInput">
+    <option value="kweli">Za Kweli</option><option value="kubuni">Za Kubuni</option>
+    <option value="vicheko">Za Vicheko</option><option value="kutisha">Za Kutisha</option>
+  </select>
+  <p class="note">Kanuni: Kila 100 views = Tsh 5000. Malipo kuanzia Tsh 10,000. Analipia Tsh 500/1000 kuweka</p>
+  <button class="btn btn-yellow" onclick="lipiaKuweka()">💳 LIPIA NA TUMA</button>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">GHARIMIA</button>
+</div>
+
+<!-- DASHBOARD YA MWANDISHI -->
+<div id="dashboard" class="card">
+  <h2>📊 DASHBOARD YAKO</h2>
+  <div class="stat-box">
+    <b>Stori/Makala zako:</b> <span id="totalStories">2</span><br>
+    <b>Zimesomwa jumla:</b> <span id="totalViews">247</span> mara<br>
+    <b>Mapato yako:</b> Tsh <span id="mapato">10000</span>
+  </div>
+  <p class="note" id="hesabuNote">Hesabu: 247 views = vipande 2 x 5000 = Tsh 10,000. Zimesalia 47 views</p>
+  <button class="btn btn-green" id="ombaBtn" onclick="ombaMalipo()">💸 OMBA MALIPO</button>
+  <p class="note">Malipo yanatoka kila tarehe 30 kwenda M-Pesa/Airtel Money yako</p>
+  <button class="btn" style="background:#475569;" onclick="rudMenu()">RUDI MENU</button>
 </div>
 
 <script>
 let salio = 5000;
-let currentType = '';
+let vip = false;
 let currentPrice = 0;
+let currentData = {};
+let prevPage = '';
+let fomuType = '';
+
+// DATABASE YA BANDIA
+let myStats = {stories: 2, views: 247, mapato: 10000};
+
+const storiesData = {
+  kweli: [{id:1,t:"Nilianza na Tsh 5000",c:"Huyu mama wa Mwanza alianza kuuza maandazi. Baada ya miezi 6 alikuwa na wafanyakazi 3 na duka lake mwenyewe. Siri yake ni nidhamu na kuweka akiba 20% kila siku.",views:120}],
+  kubuni: [{id:2,t:"Mfalme wa Anga",c:"Hapo zamani kulikuwa na mfalme aliyetawala mawingu. Siku moja mvua ikakataa kunyesha kwa sababu kulikuwa na wizi mbinguni..."}],
+  vicheko: [{id:3,t:"Mwalimu na Mwanafunzi",c:"Mwalimu: Toa mfano wa sentensi kwa neno 'gari'. Mwanafunzi: Baba amenunua gari jipya. Mwalimu: Vizuri sana. Mwanafunzi: Na mama amevunja taa ya nyuma."}],
+  kutisha: [{id:4,t:"Nyumba ya Mtoni",c:"Saa 12 jioni kila siku sauti ya mnyororo ilisikika. Mlinzi mpya aliamua kukaa macho. Saa 12 ilipofika aliona mlango unafunguka peke yake..."}]
+};
+const makalaData = {
+  biashara: [{id:5,t:"Jinsi ya Kuanza Biashara na Tsh 50,000",c:"Hatua ya 1: Chagua bidhaa inayohitajika sokoni. Hatua ya 2: Anza ndogo usikopeshe. Hatua ya 3: Weka akiba ya 20% ya faida. Hatua ya 4: Tangaza WhatsApp Status kila siku."}],
+  afya: [{id:6,t:"Faida 7 za Kunywa Maji Asubuhi",c:"1. Hutoa sumu mwilini 2. Huongeza nguvu 3. Hufanya ngozi ingae 4. Husaidia kupunguza uzito 5. Huboresha umeng'enyaji 6. Hupunguza maumivu ya kichwa 7. Huongeza kinga"}],
+  teknolojia: [{id:7,t:"Jinsi ya Kutengeneza App Bila Code",c:"Leo kuna tools nyingi za bure kama Glide, Adalo na Bubble. Una-drag na ku-drop tu. Baada ya wiki 1 una app yako PlayStore."}],
+  maisha: [{id:8,t:"Jinsi ya Kudhibiti Hasira",c:"1. Pumua mara 3 kabla ya kujibu 2. Toka nje dakika 5 3. Andika hasira yako kwenye karatasi kisha irarue 4. Kumbuka hasira haijatatui tatizo"}]
+};
 
 function updateSalio(){document.getElementById('salio').innerText = salio;}
 function rudMenu(){document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById('menu').style.display='block';}
-function funguaStories(){document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById('stories').style.display='block';}
-function funguaMakala(){document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById('makala').style.display='block';}
-function rudiNyumaList(){contentList.style.display='none'; if(currentType=='story')funguaStories(); else funguaMakala();}
+function funguaStories(){prevPage='menu'; document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById('stories').style.display='block';}
+function funguaMakala(){prevPage='menu'; document.querySelectorAll('.card').forEach(c=>c.style.display='none');document.getElementById('makala').style.display='block';}
+function rudiNyuma(){contentList.style.display='none'; document.getElementById(prevPage).style.display='block';}
+function rudiApp(){window.location.href='index.html';}
 
-// DATA YA STORIES
-const storiesData = {
-  kweli: [{t:"Nilianza na Tsh 5000",c:"Huyu mama wa Mwanza alianza kuuza maandazi..."}, {t:"Ajali ya Kisasi",c:"Siku moja barabarani nilishuhudia..."}],
-  kubuni: [{t:"Mfalme wa Anga",c:"Hapo zamani kulikuwa na mfalme aliyetawala mawingu..."}, {t:"Siri ya Pango la Dhahabu",c:"Watu watatu waliamua kuingia pangoni..."}],
-  vicheko: [{t:"Mwalimu na Mwanafunzi",c:"Mwalimu: Toa mfano wa sentensi. Mwanafunzi: Baba amenunua gari..."}, {t:"Bosi na Mfanyakazi",c:"Bosi: Kwanini umechelewa? Mfanyakazi: Nilipotea..."}],
-  kutisha: [{t:"Nyumba ya Mtoni",c:"Saa 12 jioni kila siku sauti ya mnyororo ilisikika..."}, {t:"Kivuli Chumbani",c:"Nilipoamka saa 3 usiku nikaona kivuli kimesimama..."}]
-};
-
-// DATA YA MAKALA
-const makalaData = {
-  biashara: [{t:"Jinsi ya Kuanza Biashara na Tsh 50,000",c:"Hatua ya 1: Chagua bidhaa inayohitajika..."}, {t:"Makosa 5 ya Wafanyabiashara Wapya",c:"Kosa namba 1: Kutumia faida yote..."}],
-  afya: [{t:"Faida 7 za Kunywa Maji Asubuhi",c:"Maji husaidia mwili kutoa sumu..."}, {t:"Chakula cha Kupunguza Tumbo",c:"Epuka sukari na unga mweupe..."}],
-  teknolojia: [{t:"Jinsi ya Kutengeneza App Bila Code",c:"Leo kuna tools nyingi za bure..."}, {t:"Hakimiliki Mtandaoni",c:"Usitumie picha za watu bila ruhusa..."}],
-  maisha: [{t:"Jinsi ya Kudhibiti Hasira",c:"Pumua mara 3 kabla ya kujibu..."}, {t:"Siri ya Watu Mafanikio",c:"Wanasoma vitabu kila siku..."}]
-};
+// 1. MFUMO WA KUHESABU VIEWS
+function ongezaView(id){
+  myStats.views += 1;
+  updateDashboard();
+}
 
 function chaguaAina(aina){
-  currentType = 'story'; currentPrice = 100;
+  currentPrice=100; prevPage='stories';
   contentList.style.display='block'; stories.style.display='none';
   document.getElementById('listTitle').innerText = "STORI ZA " + aina.toUpperCase();
   let html = '';
   storiesData[aina].forEach((s,i)=>{
-    html += `<div class="story-box" onclick="funguaContent('story','${aina}',${i})"><b>${s.t}</b><br><small>Tsh 100 - Bofya kusoma</small></div>`;
+    html += `<div class="content-box" onclick="funguaContent('story','${aina}',${i})"><b>${s.t}</b><br><small>Tsh 100 | Views: ${s.views||0}</small></div>`;
   });
   document.getElementById('orodhaContent').innerHTML = html;
 }
 
 function chaguaMakala(aina){
-  currentType = 'makala'; currentPrice = 200;
+  currentPrice=200; prevPage='makala';
   contentList.style.display='block'; makala.style.display='none';
   document.getElementById('listTitle').innerText = "MAKALA ZA " + aina.toUpperCase();
   let html = '';
   makalaData[aina].forEach((s,i)=>{
-    html += `<div class="makala-box" onclick="funguaContent('makala','${aina}',${i})"><b>${s.t}</b><br><small>Tsh 200 - Bofya kusoma</small></div>`;
+    html += `<div class="content-box" onclick="funguaContent('makala','${aina}',${i})"><b>${s.t}</b><br><small>Tsh 200</small></div>`;
   });
   document.getElementById('orodhaContent').innerHTML = html;
 }
@@ -126,29 +167,83 @@ function funguaContent(type,aina,i){
   somaContent.style.display='block'; contentList.style.display='none';
   let data = type=='story'? storiesData[aina][i] : makalaData[aina][i];
   document.getElementById('contentTitle').innerText = data.t;
-  document.getElementById('contentBody').innerText = data.c + "...[ENDELEA BAADA YA KULIPIA]";
-  document.getElementById('nunuaBtn').innerText = `💳 NUNUA KUSOMA Tsh ${currentPrice}`;
-  window.contentData = data;
+  document.getElementById('contentBody').innerText = data.c + "\n\n...[ENDELEA BAADA YA KULIPIA]";
+  document.getElementById('nunuaBtn').innerText = vip? "✅ SOMA BURE - VIP" : `💳 NUNUA KUSOMA Tsh ${currentPrice}`;
+  currentData = data;
 }
 
-function nunuaContent(){
-  if(salio >= currentPrice){salio -= currentPrice; updateSalio();
-    alert(`✅ UMEFAULU! Tsh ${currentPrice} imetolewa\nSasa unaweza kusoma yote`);
-    document.getElementById('contentBody').innerText += " Asante kwa kununua VIJI PAY.";
-  }else{alert("❌ Salio halitoshi. Tafadhali ongeza pesa")}
+function nunuaKusoma(){
+  if(vip){document.getElementById('contentBody').innerText = currentData.c; ongezaView(currentData.id); return;}
+  if(salio >= currentPrice){
+    salio -= currentPrice; updateSalio();
+    alert(`✅ UMEFAULU! Tsh ${currentPrice} imetolewa`);
+    document.getElementById('contentBody').innerText = currentData.c;
+    ongezaView(currentData.id);
+  }else{alert(`❌ Salio halitoshi. Unahitaji Tsh ${currentPrice}`)}
 }
 
-function lipiaStories(){
-  if(salio >= 1000){salio -= 1000; updateSalio(); alert("✅ UMEJIUNGA! Stories mwezi mzima bure. Tsh 1000 imetolewa")}else{alert("❌ Salio halitoshi")}
+function funguaFomu(type){
+  fomuType = type;
+  fomuWeka.style.display='block'; stories.style.display='none'; makala.style.display='none';
+  document.getElementById('fomuTitle').innerText = type=='story'? 'WEKA STORI - Tsh 500' : 'WEKA MAKALA - Tsh 1000';
 }
-function lipiaMakala(){
-  if(salio >= 2000){salio -= 2000; updateSalio(); alert("✅ UMEJIUNGA! Makala mwezi mzima bure. Tsh 2000 imetolewa")}else{alert("❌ Salio halitoshi")}
-}
-function ongezaContent(type){alert(`Tuma ${type} yako WhatsApp: 07XXXXXXXX\nUkilipwa Tsh 5000 kwa content iliyochaguliwa`)}
-function tumaPesa(){alert("Sehemu ya Kutuma Pesa - Inakuja")}
-function lipia(){alert("Sehemu ya Kulipia Bili - Inakuja")}
 
-updateSalio();
+function lipiaKuweka(){
+  let bei = fomuType=='story'? 500 : 1000;
+  let title = document.getElementById('titleInput').value;
+  let body = document.getElementById('bodyInput').value;
+  if(title=='' || body==''){alert('Tafadhali jaza kichwa na maudhui'); return;}
+  if(salio >= bei){
+    salio -= bei; updateSalio(); myStats.stories +=1;
+    alert(`✅ UMEFAULU! Tsh ${bei} imetolewa\nContent yako imekwenda kwa msimamizi kuidhinisha.`);
+    document.getElementById('titleInput').value=''; document.getElementById('bodyInput').value='';
+    rudMenu();
+  }else{alert(`❌ Salio halitoshi. Unahitaji Tsh ${bei}`)}
+}
+
+function lipiaMwezi(){
+  if(salio >= 2000){salio -= 2000; vip=true; updateSalio(); alert(`✅ UMEJIUNGA VIP! Mwezi mzima kusoma bure.`)}else{alert("❌ Salio halitoshi")}
+}
+
+// 2. DASHBOARD + 3. OMBA MALIPO + KANUNI YA VIEWS < 100
+function funguaDashboard(){
+  updateDashboard();
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  document.getElementById('dashboard').style.display='block';
+}
+
+function updateDashboard(){
+  // KANUNI: Tunahesabu vipande vya 100 tu
+  let vipande100 = Math.floor(myStats.views / 100);
+  let mapatoSahihi = vipande100 * 5000;
+  let viewsZilizobaki = myStats.views % 100;
+
+  document.getElementById('totalStories').innerText = myStats.stories;
+  document.getElementById('totalViews').innerText = myStats.views;
+  document.getElementById('mapato').innerText = mapatoSahihi;
+  document.getElementById('hesabuNote').innerText = `Hesabu: ${myStats.views} views = vipande ${vipande100} x 5000 = Tsh ${mapatoSahihi}. Zimesalia ${viewsZilizobaki} views`;
+
+  // Washa/zima button
+  document.getElementById('ombaBtn').style.opacity = mapatoSahihi >= 10000? '1' : '0.5';
+}
+
+function ombaMalipo(){
+  let vipande100 = Math.floor(myStats.views / 100);
+  let mapatoSahihi = vipande100 * 5000;
+
+  if(mapatoSahihi >= 10000){
+    alert(`✅ OMBI LAKO LIMEPELEKWA!\nTsh ${mapatoSahihi} utalipwa tarehe 30 kwenda M-Pesa yako.`);
+    // Baada ya kulipa tunapunguza views zilizolipiwa
+    myStats.views = myStats.views % 100; // Zinabaki 0-99
+    updateDashboard();
+  }else{
+    let zinahitajika = 100 - (myStats.views % 100);
+    if(myStats.views % 100 == 0) zinahitajika = 100;
+    alert(`❌ BADO HUJAFIKA Tsh 10,000\nUna views ${myStats.views}. Unahitaji views nyingine ${zinahitajika} ili ufike kizingiti cha malipo.`)
+  }
+}
+
+updateSalio(); updateDashboard();
 </script>
 </body>
   </html>
